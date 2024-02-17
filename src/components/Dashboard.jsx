@@ -51,7 +51,7 @@ function Dashboard() {
 
       <div className={styles.results}>
         <div className={styles.box}>
-          <h2>Cheaters</h2>
+          <h2>Wall of shame</h2>
           {renderList(cheaters, "No Cheaters found")}
         </div>
         <div className={styles.box}>
