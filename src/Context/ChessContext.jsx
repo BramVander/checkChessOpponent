@@ -111,8 +111,6 @@ function ChessProvider({ children }) {
   async function login(user) {
     if (user === initialState.user) return;
 
-    dispatch({ type: "loading" });
-
     try {
       const res = await fetch(`${BASE_URL}/${user}`);
       const data = await res.json();
