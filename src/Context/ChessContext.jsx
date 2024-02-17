@@ -91,7 +91,7 @@ function ChessProvider({ children }) {
           if (data.status === "closed:fair_play_violations") {
             foundCheaters.push(opponent);
           }
-          if (data.is_streamer === "true") {
+          if (data.is_streamer === true) {
             foundStreamers.push(opponent);
           }
         } catch (error) {
