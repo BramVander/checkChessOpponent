@@ -59,6 +59,10 @@ button {
   cursor: pointer;
 }
 
+button:hover {
+  opacity: 0.8;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
