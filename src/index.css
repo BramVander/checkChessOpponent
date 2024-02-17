@@ -64,7 +64,8 @@ button {
   justify-content: space-between;
 
   button {
-    background-color: orange;
+    background-color: #fa412d;
+    border: #fa412d;
     height: fit-content;
   }
 }
