@@ -1,0 +1,25 @@
+.ui {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .btnCheater {
+    width: fit-content;
+  }
+}
+
+.results {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+
+  .box {
+    display: flex;
+    flex-direction: column;
+  }
+}
