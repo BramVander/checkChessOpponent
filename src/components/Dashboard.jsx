@@ -34,12 +34,14 @@ function Dashboard() {
   return (
     <>
       <div className={styles.ui}>
-        <img className={styles.avatar} src={data.avatar} />
-        <p>
-          Track opponents {user} played against <br></br>
-          Find <strong>cheaters</strong> on the wall of shame &<br></br>Find{" "}
-          <strong>streamers</strong> in the hall of fame
-        </p>
+        <div className={styles.intro}>
+          <img className={styles.avatar} src={data.avatar} />
+          <p>
+            Track opponents <strong>{user}</strong> played against <br></br>
+            Find <strong>cheaters</strong> on the wall of shame &<br></br>Find{" "}
+            <strong>streamers</strong> in the hall of fame
+          </p>
+        </div>
 
         <label>Select a month</label>
         <DatePicker
@@ -48,7 +50,7 @@ function Dashboard() {
           dateFormat={"dd/MM/yyy"}
         />
 
-        <button className={styles.btnCheater} onClick={handleClick}>
+        <button className={styles.btnCheck} onClick={handleClick}>
           Check history
         </button>
       </div>
