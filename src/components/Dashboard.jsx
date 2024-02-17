@@ -37,8 +37,8 @@ function Dashboard() {
         <img className={styles.avatar} src={data.avatar} />
         <p>
           Track opponents {user} played against <br></br>
-          Lookup cheaters on the wall of shame <br></br>Lookup streamers in the
-          hall of fame
+          Find <strong>cheaters</strong> on the wall of shame &<br></br>Find{" "}
+          <strong>streamers</strong> in the hall of fame
         </p>
 
         <label>Select a month</label>
