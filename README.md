@@ -1,3 +1,9 @@
+App I made in React with Chess.com API.
+Check to see if you played:
+- cheaters
+- streamers
+- more comming...
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
