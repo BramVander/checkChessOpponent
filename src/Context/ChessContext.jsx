@@ -41,8 +41,8 @@ function reducer(state, action) {
       for (const game of action.payload) {
         unique.add(
           game.white.username.toLowerCase() === state.user.toLowerCase()
-            ? game.black.username.toLowerCase()
-            : game.white.username.toLowerCase()
+            ? game.black.username
+            : game.white.username
         );
       }
 

@@ -5,7 +5,9 @@ function Loader() {
 
   return (
     <>
-      <p>This will take more time with more opponents...</p>
+      <h2 className={styles.loadingmsg}>
+        This will take more time with more opponents...
+      </h2>
       <p>Meanwhile, stare at this beautiful loader</p>
       <div className={styles.container}>
         <div className={styles.loader}>

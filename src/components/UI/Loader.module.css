@@ -18,6 +18,10 @@ li {
   padding: 10%;
 }
 
+.loadingmsg {
+  color: orange;
+}
+
 .list {
   width: 150px; /* Adjust according to your needs */
   aspect-ratio: 1 / 1;
