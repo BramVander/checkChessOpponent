@@ -30,7 +30,7 @@ function App() {
         </div>
 
         <h1>
-          Opponent tracker for{" "}
+          Check your opponents for{" "}
           <a href="https://www.chess.com/" target="_blank">
             chess.com
           </a>
