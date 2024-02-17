@@ -35,7 +35,11 @@ function Dashboard() {
     <>
       <div className={styles.ui}>
         <img className={styles.avatar} src={data.avatar} />
-        <p>Track opponents {user} played against</p>
+        <p>
+          Track opponents {user} played against <br></br>
+          Lookup cheaters on the wall of shame <br></br>Lookup streamers in the
+          hall of fame
+        </p>
 
         <label>Select a month</label>
         <DatePicker
@@ -55,7 +59,7 @@ function Dashboard() {
           {renderList(cheaters, "No Cheaters found")}
         </div>
         <div className={styles.box}>
-          <h2>Streamers</h2>
+          <h2>Hall of fame</h2>
           {renderList(streamers, "No Streamers found")}
         </div>
       </div>
