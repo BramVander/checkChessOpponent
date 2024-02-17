@@ -11,6 +11,9 @@ function Dashboard() {
   const [date, setDate] = useState();
   const { user, data, games, cheaters, streamers, fetchOpponents } = useChess();
 
+  let oneYearAgo = new Date();
+  oneYearAgo.setFullYear(new Date().getFullYear() - 1);
+
   function handleClick(e) {
     e.preventDefault();
 
@@ -47,7 +50,11 @@ function Dashboard() {
         <DatePicker
           selected={date}
           onChange={(date) => setDate(date)}
-          dateFormat={"dd/MM/yyy"}
+          dateFormat={"MMM/yyyy"}
+          dateFormatCalendar={"MMM/yyyy"}
+          minDate={oneYearAgo}
+          maxDate={new Date()}
+          showMonthYearDropdown
         />
 
         <button className={styles.btnCheck} onClick={handleClick}>
