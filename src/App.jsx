@@ -23,7 +23,7 @@ function App() {
             src="https://images.chesscomfiles.com/uploads/v1/group/57796.67ee0038.160x160o.2dc0953ad64e.png"
           />
           {user && (
-            <button className="logout" onClick={handleLogout}>
+            <button className="btn-primary logout" onClick={handleLogout}>
               Logout
             </button>
           )}
@@ -35,6 +35,7 @@ function App() {
             chess.com
           </a>
         </h1>
+
         {error && <Error message={error} />}
         {isLoading && <Loader />}
         {!isLoading && !user && <Login />}

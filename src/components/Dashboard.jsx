@@ -1,29 +1,10 @@
-import { useState } from "react";
-import DatePicker from "react-datepicker";
-
-import "react-datepicker/dist/react-datepicker.css";
-
 import { useChess } from "../Context/ChessContext";
+import DatePicker from "./MonthPicker";
 
 import styles from "./Dashboard.module.css";
 
 function Dashboard() {
-  const [date, setDate] = useState();
-  const { user, data, games, cheaters, streamers, fetchOpponents } = useChess();
-
-  let oneYearAgo = new Date();
-  oneYearAgo.setFullYear(new Date().getFullYear() - 1);
-
-  function handleClick(e) {
-    e.preventDefault();
-
-    if (!date) return;
-
-    let year = date.getFullYear();
-    let month = (date.getMonth() + 1).toString().padStart(2, "0");
-
-    fetchOpponents(year, month);
-  }
+  const { user, data, games, cheaters, streamers } = useChess();
 
   const renderList = (data, message) =>
     Object.keys(games).length > 0 ? (
@@ -47,27 +28,22 @@ function Dashboard() {
         </div>
 
         <label>Select a month</label>
-        <DatePicker
-          selected={date}
-          onChange={(date) => setDate(date)}
-          dateFormat={"MMM/yyyy"}
-          dateFormatCalendar={"MMM/yyyy"}
-          minDate={oneYearAgo}
-          maxDate={new Date()}
-          showMonthYearDropdown
-        />
-
-        <button className={styles.btnCheck} onClick={handleClick}>
-          Check history
-        </button>
+        <DatePicker></DatePicker>
       </div>
 
+      {games.length > 0 && (
+        <h2>
+          Found {games.length} opponents, of which {cheaters.length} cheaters
+          and {streamers.length} streamers
+        </h2>
+      )}
+
       <div className={styles.results}>
-        <div className={styles.box}>
+        <div className={styles.box + " " + styles.cheaters}>
           <h2>Wall of shame</h2>
           {renderList(cheaters, "No Cheaters found")}
         </div>
-        <div className={styles.box}>
+        <div className={styles.box + " " + styles.streamers}>
           <h2>Hall of fame</h2>
           {renderList(streamers, "No Streamers found")}
         </div>

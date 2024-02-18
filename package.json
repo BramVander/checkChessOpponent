@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-datepicker": "^6.1.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-lite-month-picker": "^1.2.15"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",

@@ -14,7 +14,7 @@ function Login() {
     <form onSubmit={handleLogin}>
       <label>Please state your chess.com username</label>
       <input id="username" type="text" placeholder="username" />
-      <button>Login</button>
+      <button className="btn-primary">Login</button>
     </form>
   );
 }
