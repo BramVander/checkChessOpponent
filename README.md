@@ -1,4 +1,4 @@
-Check it out on https://checkchessopponents.netlify.app/ !
+Check it out on [https://checkyouropponent.netlify.app/](https://checkyouropponent.netlify.app/) !
 
 App I made in React with Chess.com API.
 Check to see if you played:
