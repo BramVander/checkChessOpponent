@@ -23,14 +23,14 @@ li {
 }
 
 .list {
-  width: 150px; /* Adjust according to your needs */
+  width: 150px;
   aspect-ratio: 1 / 1;
   position: relative;
 }
 
 .item {
   position: absolute;
-  transform-origin: 0 75px; /* Adjust according to your needs */
+  transform-origin: 0 75px;
   transform: translate(75px) rotate(calc(var(--i) * -30deg));
   animation: color 1.2s infinite;
 }
