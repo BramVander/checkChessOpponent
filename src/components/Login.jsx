@@ -7,7 +7,7 @@ function Login() {
     e.preventDefault();
 
     const user = { username };
-    await login(user.username.value);
+    await login(user.username.value.toLowerCase());
   }
 
   return (

@@ -6,6 +6,34 @@ import styles from "./Dashboard.module.css";
 function Dashboard() {
   const { user, data, games, cheaters, streamers } = useChess();
 
+  function calcLastOnline(timestamp) {
+    const miliSec = new Date(timestamp * 1000);
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const year = miliSec.getFullYear();
+    const month = months[miliSec.getMonth()];
+    const day = miliSec.getDate();
+
+    const date = day + " " + month + " " + year;
+
+    return date;
+  }
+
+  const timestamp = data.last_online;
+  const lastOnline = calcLastOnline(timestamp);
+
   const renderList = (data, message) =>
     Object.keys(games).length > 0 ? (
       Object.keys(data).length > 0 ? (
@@ -22,6 +50,7 @@ function Dashboard() {
           <img className={styles.avatar} src={data.avatar} />
           <p>
             Track opponents <strong>{user}</strong> played against <br></br>
+            Last online: {lastOnline} <br></br>
             Find <strong>cheaters</strong> on the wall of shame &<br></br>Find{" "}
             <strong>streamers</strong> in the hall of fame
           </p>

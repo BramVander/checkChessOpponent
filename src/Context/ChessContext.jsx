@@ -119,14 +119,12 @@ function ChessProvider({ children }) {
       const data = await res.json();
       // console.log(data);
 
-      if (data.message) {
-        dispatch({ type: "dataFailed", payload: data.message });
-      } else {
-        dispatch({
-          type: "login",
-          payload: { user: user, data: data },
-        });
-      }
+      if (data.message) throw new Error(data.message);
+
+      dispatch({
+        type: "login",
+        payload: { user: user, data: data },
+      });
     } catch (error) {
       dispatch({ type: "dataFailed", payload: error.message });
     }
@@ -148,16 +146,14 @@ function ChessProvider({ children }) {
       const data = await res.json();
       // console.log(data.games.length === 0);
 
-      if (data.games.length === 0) {
-        dispatch({ type: "dataFailed", payload: "No games found this month" });
-      } else if (data.message) {
-        dispatch({ type: "dataFailed", payload: data.message });
-      } else {
-        dispatch({
-          type: "data/opponents",
-          payload: data.games,
-        });
-      }
+      if (data.games.length === 0) throw new Error("No games found this month");
+
+      if (data.message) throw new Error(data.message);
+
+      dispatch({
+        type: "data/opponents",
+        payload: data.games,
+      });
     } catch (error) {
       dispatch({ type: "dataFailed", payload: error.message });
     }
