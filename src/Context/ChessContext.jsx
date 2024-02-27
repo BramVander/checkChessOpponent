@@ -65,6 +65,9 @@ function reducer(state, action) {
     case "dataFailed":
       return {
         ...state,
+        games: [],
+        cheaters: [],
+        streamers: [],
         isLoading: false,
         error: action.payload,
       };
