@@ -1,6 +1,6 @@
 Check it out on [https://checkyouropponent.netlify.app/](https://checkyouropponent.netlify.app/) !
 
-If you don't have an account, use mine: BramVander
+If you don't have an account, use mine: bramvander
 
 Cheaters caught: may 2023
 
