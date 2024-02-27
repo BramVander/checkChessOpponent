@@ -33,7 +33,14 @@ function reducer(state, action) {
       };
     case "logout":
       return {
-        initialState,
+        user: "",
+        error: "",
+        isLoading: false,
+        data: {},
+        games: [],
+        opponents: new Set(),
+        cheaters: [],
+        streamers: [],
       };
     case "data/opponents": {
       const unique = new Set();
@@ -120,7 +127,7 @@ function ChessProvider({ children }) {
     try {
       const res = await fetch(`${BASE_URL}/${user}`);
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
 
       if (data.message) throw new Error(data.message);
 
