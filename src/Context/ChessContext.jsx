@@ -33,8 +33,7 @@ function reducer(state, action) {
       };
     case "logout":
       return {
-        ...state,
-        user: "",
+        initialState,
       };
     case "data/opponents": {
       const unique = new Set();
@@ -100,6 +99,7 @@ function ChessProvider({ children }) {
           if (data.is_streamer === true) {
             foundStreamers.push(opponent);
           }
+          // if(data.twitch_url) console.log(data.twitch_url)
         } catch (error) {
           console.error(error);
         }
@@ -120,7 +120,7 @@ function ChessProvider({ children }) {
     try {
       const res = await fetch(`${BASE_URL}/${user}`);
       const data = await res.json();
-      // console.log(data);
+      console.log(data);
 
       if (data.message) throw new Error(data.message);
 
