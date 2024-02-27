@@ -149,7 +149,8 @@ function ChessProvider({ children }) {
       const data = await res.json();
       // console.log(data.games.length === 0);
 
-      if (data.games.length === 0) throw new Error("No games found this month");
+      if (data.games && data.games.length === 0)
+        throw new Error("No games found this month");
 
       if (data.message) throw new Error(data.message);
 
