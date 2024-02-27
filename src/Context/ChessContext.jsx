@@ -27,6 +27,7 @@ function reducer(state, action) {
       return {
         ...state,
         isLoading: false,
+        error: "",
         user: action.payload.user,
         data: action.payload.data,
       };
@@ -48,6 +49,7 @@ function reducer(state, action) {
 
       return {
         ...state,
+        error: "",
         games: action.payload,
         opponents: unique,
       };
@@ -55,6 +57,7 @@ function reducer(state, action) {
     case "data/checkOpponents":
       return {
         ...state,
+        error: "",
         isLoading: false,
         cheaters: action.payload.cheaters,
         streamers: action.payload.streamers,
@@ -114,11 +117,16 @@ function ChessProvider({ children }) {
     try {
       const res = await fetch(`${BASE_URL}/${user}`);
       const data = await res.json();
+      // console.log(data);
 
-      dispatch({
-        type: "login",
-        payload: { user: user, data: data },
-      });
+      if (data.message) {
+        dispatch({ type: "dataFailed", payload: data.message });
+      } else {
+        dispatch({
+          type: "login",
+          payload: { user: user, data: data },
+        });
+      }
     } catch (error) {
       dispatch({ type: "dataFailed", payload: error.message });
     }
@@ -138,11 +146,18 @@ function ChessProvider({ children }) {
         `https://api.chess.com/pub/player/${user}/games/${year}/${month}`
       );
       const data = await res.json();
+      // console.log(data.games.length === 0);
 
-      dispatch({
-        type: "data/opponents",
-        payload: data.games,
-      });
+      if (data.games.length === 0) {
+        dispatch({ type: "dataFailed", payload: "No games found this month" });
+      } else if (data.message) {
+        dispatch({ type: "dataFailed", payload: data.message });
+      } else {
+        dispatch({
+          type: "data/opponents",
+          payload: data.games,
+        });
+      }
     } catch (error) {
       dispatch({ type: "dataFailed", payload: error.message });
     }
