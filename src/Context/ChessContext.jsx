@@ -7,6 +7,7 @@ const ChessContext = createContext();
 
 const initialState = {
   user: "",
+  player: "",
   error: "",
   isLoading: false,
   data: {},
@@ -34,13 +35,21 @@ function reducer(state, action) {
     case "logout":
       return {
         user: "",
-        error: "",
+        player: "",
         isLoading: false,
+        error: "",
         data: {},
         games: [],
         opponents: new Set(),
         cheaters: [],
         streamers: [],
+      };
+    case "data/player":
+      return {
+        ...state,
+        player: action.payload,
+        isLoading: false,
+        error: "",
       };
     case "data/opponents": {
       const unique = new Set();
@@ -55,6 +64,7 @@ function reducer(state, action) {
 
       return {
         ...state,
+        player: "",
         error: "",
         games: action.payload,
         opponents: unique,
@@ -63,6 +73,7 @@ function reducer(state, action) {
     case "data/checkOpponents":
       return {
         ...state,
+        player: "",
         error: "",
         isLoading: false,
         cheaters: action.payload.cheaters,
@@ -71,11 +82,18 @@ function reducer(state, action) {
     case "dataFailed":
       return {
         ...state,
+        player: "",
         games: [],
         cheaters: [],
         streamers: [],
         isLoading: false,
         error: action.payload,
+      };
+    case "account/closed":
+      return {
+        ...state,
+        isLoading: false,
+        player7: action.payload,
       };
     default:
       throw new Error("Action unknown");
@@ -84,7 +102,17 @@ function reducer(state, action) {
 
 function ChessProvider({ children }) {
   const [
-    { user, error, isLoading, data, games, opponents, cheaters, streamers },
+    {
+      user,
+      player,
+      error,
+      isLoading,
+      data,
+      games,
+      opponents,
+      cheaters,
+      streamers,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -122,7 +150,7 @@ function ChessProvider({ children }) {
   }, [opponents]);
 
   async function login(user) {
-    if (user === initialState.user) return;
+    if (user === " ") return;
 
     try {
       const res = await fetch(`${BASE_URL}/${user}`);
@@ -142,6 +170,34 @@ function ChessProvider({ children }) {
 
   function logout() {
     dispatch({ type: "logout" });
+  }
+
+  async function checkPlayer(opponent) {
+    if (opponent === " ") return;
+
+    try {
+      const res = await fetch(`https://api.chess.com/pub/player/${opponent}`);
+      const data = await res.json();
+
+      if (data.message) throw new Error(data.message);
+
+      if (
+        data.status === "closed:abuse" ||
+        data.status === "closed:fair_play_violations"
+      ) {
+        dispatch({
+          type: "data/player",
+          payload: data.status,
+        });
+      } else {
+        dispatch({
+          type: "data/player",
+          payload: "No violations found (yet)",
+        });
+      }
+    } catch (error) {
+      dispatch({ type: "dataFailed", payload: error.message });
+    }
   }
 
   async function fetchOpponents(year, month) {
@@ -174,6 +230,7 @@ function ChessProvider({ children }) {
     <ChessContext.Provider
       value={{
         user,
+        player,
         error,
         isLoading,
         data,
@@ -185,6 +242,7 @@ function ChessProvider({ children }) {
         login,
         logout,
         fetchOpponents,
+        checkPlayer,
       }}
     >
       {children}

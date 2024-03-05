@@ -12,16 +12,11 @@ function App() {
     logout();
   }
 
-  // if (error) return <Error message={error} />;
-
   return (
     <>
       <main>
         <div className="header">
-          <img
-            alt="Chess logo"
-            src="https://images.chesscomfiles.com/uploads/v1/group/57796.67ee0038.160x160o.2dc0953ad64e.png"
-          />
+          <img alt="Chess logo" src="/logo.png" />
           {user && (
             <button className="btn-primary logout" onClick={handleLogout}>
               Logout
@@ -36,7 +31,7 @@ function App() {
           </a>
         </h1>
 
-        {error && <Error message={error} />}
+        {error && <Error message={error} color="tomato" />}
         {isLoading && <Loader />}
         {!isLoading && !user && <Login />}
         {!isLoading && user && <Dashboard user={user} />}

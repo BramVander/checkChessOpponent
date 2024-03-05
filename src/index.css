@@ -12,6 +12,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+img {
+  height: 48px;
+  width: auto;
+}
+
 body {
   display: flex;
   justify-content: center;

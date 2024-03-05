@@ -1,8 +1,8 @@
-function Error({ message }) {
+function Error({ message, color }) {
   return (
     <p
       style={{
-        color: "tomato",
+        color: color,
         fontWeight: "900",
         backgroundColor: "black",
         width: "fit-content",
