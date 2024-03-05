@@ -2,7 +2,7 @@ import { useChess } from "../Context/ChessContext";
 import Error from "./UI/Error";
 
 function Login() {
-  const { player, login, checkPlayer } = useChess();
+  const { player, login, checkSuspect } = useChess();
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -11,11 +11,12 @@ function Login() {
     await login(user.username.value.toLowerCase());
   }
 
-  async function handleCheckPlayer(e) {
+  async function handleCheckSuspect(e) {
     e.preventDefault();
 
     const user = { opponent };
-    await checkPlayer(user.opponent.value.toLowerCase());
+    await checkSuspect(user.opponent.value.toLowerCase());
+    // await checkPlayerRating(user.opponent.value.toLowerCase());
   }
 
   return (
@@ -25,8 +26,8 @@ function Login() {
         <button className="btn-primary">Check my opponents</button>
       </form>
 
-      <h2>Check specific player</h2>
-      <form onSubmit={handleCheckPlayer}>
+      <h2>Check a suspicious player</h2>
+      <form onSubmit={handleCheckSuspect}>
         <input id="opponent" type="text" placeholder="Opponent" required />
         <button className="btn-primary">Check this player</button>
         {player && (

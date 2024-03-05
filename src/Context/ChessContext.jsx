@@ -172,7 +172,7 @@ function ChessProvider({ children }) {
     dispatch({ type: "logout" });
   }
 
-  async function checkPlayer(opponent) {
+  async function checkSuspect(opponent) {
     if (opponent === " ") return;
 
     try {
@@ -195,6 +195,27 @@ function ChessProvider({ children }) {
           payload: "No violations found (yet)",
         });
       }
+    } catch (error) {
+      dispatch({ type: "dataFailed", payload: error.message });
+    }
+  }
+
+  async function checkRating(opponent) {
+    if (opponent === " ") return;
+
+    try {
+      const res = await fetch(
+        `https://api.chess.com/pub/player/${opponent}/stats`
+      );
+      const data = await res.json();
+
+      if (data.message) throw new Error(data.message);
+
+      console.log("data", data);
+      console.log("fide", data.fide);
+      console.log("rapid", data.chess_rapid);
+      console.log("best", data.chess_rapid.best.rating);
+      console.log("last", data.chess_rapid.last.rating);
     } catch (error) {
       dispatch({ type: "dataFailed", payload: error.message });
     }
@@ -242,7 +263,7 @@ function ChessProvider({ children }) {
         login,
         logout,
         fetchOpponents,
-        checkPlayer,
+        checkSuspect,
       }}
     >
       {children}
