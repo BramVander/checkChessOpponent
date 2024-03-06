@@ -12,7 +12,10 @@ function Loader() {
         <h2 className={styles.loadingmsg}>Can take up to 1 minute </h2>&nbsp;
         <FontAwesomeIcon icon={faCircleExclamation} />
       </div>
-      <p>Meanwhile, stare at this beautiful loader</p>
+      <p>
+        More opponents played = longer loading time. <br />
+        Meanwhile, stare at this beautiful loader.
+      </p>
       <div className={styles.container}>
         <div className={styles.loader}>
           <ul className={styles.list}>
