@@ -8,9 +8,11 @@ Because there is no endpoint for cheatdata, I HAVE to make a request per opponen
 This makes the check pretty slow when you play alot of opponents.
 
 App I made in React with Chess.com API.
-Check to see if you played:
+Check:
 - cheaters
 - streamers
+- suspicious players
+- stats
 - more comming...
 
 # React + Vite
