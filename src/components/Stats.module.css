@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1rem;
+}
+
+.box {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 5px;
+  border: 3px solid #7fa650;
+  background-color: #242424;
+
+  label {
+    color: #7fa650;
+    font-size: 20px;
+  }
+}

@@ -7,7 +7,16 @@ const ChessContext = createContext();
 
 const initialState = {
   user: "",
-  player: "",
+  player: {
+    name: "",
+    status: "",
+    fide: null,
+    best: null,
+    last: null,
+    wins: null,
+    losses: null,
+    draws: null,
+  },
   error: "",
   isLoading: false,
   data: {},
@@ -35,7 +44,7 @@ function reducer(state, action) {
     case "logout":
       return {
         user: "",
-        player: "",
+        player: {},
         isLoading: false,
         error: "",
         data: {},
@@ -47,7 +56,22 @@ function reducer(state, action) {
     case "data/player":
       return {
         ...state,
-        player: action.payload,
+        player: { status: action.payload },
+        isLoading: false,
+        error: "",
+      };
+    case "data/rating":
+      return {
+        ...state,
+        player: {
+          status: state.player.status,
+          fide: action.payload.fide,
+          best: action.payload.chess_rapid?.best.rating,
+          last: action.payload.chess_rapid?.last.rating,
+          wins: action.payload.chess_rapid?.record.win,
+          losses: action.payload.chess_rapid?.record.loss,
+          draws: action.payload.chess_rapid?.record.draw,
+        },
         isLoading: false,
         error: "",
       };
@@ -64,7 +88,6 @@ function reducer(state, action) {
 
       return {
         ...state,
-        player: "",
         error: "",
         games: action.payload,
         opponents: unique,
@@ -73,7 +96,6 @@ function reducer(state, action) {
     case "data/checkOpponents":
       return {
         ...state,
-        player: "",
         error: "",
         isLoading: false,
         cheaters: action.payload.cheaters,
@@ -82,7 +104,6 @@ function reducer(state, action) {
     case "dataFailed":
       return {
         ...state,
-        player: "",
         games: [],
         cheaters: [],
         streamers: [],
@@ -93,7 +114,7 @@ function reducer(state, action) {
       return {
         ...state,
         isLoading: false,
-        player7: action.payload,
+        player: { status: action.payload },
       };
     default:
       throw new Error("Action unknown");
@@ -181,6 +202,8 @@ function ChessProvider({ children }) {
 
       if (data.message) throw new Error(data.message);
 
+      // console.log("data", data);
+
       if (
         data.status === "closed:abuse" ||
         data.status === "closed:fair_play_violations"
@@ -211,11 +234,7 @@ function ChessProvider({ children }) {
 
       if (data.message) throw new Error(data.message);
 
-      console.log("data", data);
-      console.log("fide", data.fide);
-      console.log("rapid", data.chess_rapid);
-      console.log("best", data.chess_rapid.best.rating);
-      console.log("last", data.chess_rapid.last.rating);
+      dispatch({ type: "data/rating", payload: data });
     } catch (error) {
       dispatch({ type: "dataFailed", payload: error.message });
     }
@@ -264,6 +283,7 @@ function ChessProvider({ children }) {
         logout,
         fetchOpponents,
         checkSuspect,
+        checkRating,
       }}
     >
       {children}
