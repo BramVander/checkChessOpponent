@@ -9,7 +9,7 @@ function Loader() {
     <>
       <div className={styles.warning}>
         <FontAwesomeIcon icon={faCircleExclamation} /> &nbsp;
-        <h2 className={styles.loadingmsg}>Can take up to a minute </h2>&nbsp;
+        <h2 className={styles.loadingmsg}>Can take up to 1 minute </h2>&nbsp;
         <FontAwesomeIcon icon={faCircleExclamation} />
       </div>
       <p>Meanwhile, stare at this beautiful loader</p>
