@@ -104,6 +104,7 @@ function reducer(state, action) {
     case "dataFailed":
       return {
         ...state,
+        player: {},
         games: [],
         cheaters: [],
         streamers: [],
