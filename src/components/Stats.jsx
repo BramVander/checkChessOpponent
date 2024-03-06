@@ -28,14 +28,14 @@ function Stats({ player }) {
           </div>
 
           <div className={styles.box}>
+            <label>Winrate:</label>
+            <p>{Math.round((player.wins / totalGames) * 100) + "%"}</p>
             <label>Wins:</label>
             <p>{player.wins}</p>
             <label>losses:</label>
             <p>{player.losses}</p>
             <label>Draws:</label>
             <p>{player.draws}</p>
-            <label>Winrate:</label>
-            <p>{Math.round((player.wins / totalGames) * 100) + "%"}</p>
           </div>
         </div>
       ) : (
