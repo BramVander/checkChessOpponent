@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 
 const BASE_URL = "https://api.chess.com/pub/player";
-// find endpoint for opponents
 
 const ChessContext = createContext();
 
@@ -156,7 +155,7 @@ function ChessProvider({ children }) {
           if (data.is_streamer === true) {
             foundStreamers.push(opponent);
           }
-          // if(data.twitch_url) console.log(data.twitch_url)
+          // if(data.twitch_url) foundStreamers.push(data.twitch_url)
         } catch (error) {
           console.error(error);
         }
