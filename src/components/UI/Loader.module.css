@@ -18,8 +18,15 @@ li {
   padding: 10%;
 }
 
-.loadingmsg {
-  color: orange;
+.warning {
+  display: flex;
+  align-items: baseline;
+  font-size: 2rem;
+  color: tomato;
+
+  .loadingmsg {
+    text-decoration: underline;
+  }
 }
 
 .list {

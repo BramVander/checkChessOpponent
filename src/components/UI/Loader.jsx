@@ -1,13 +1,17 @@
 import styles from "./Loader.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 function Loader() {
   const items = Array.from({ length: 12 }, (_, index) => index + 1);
 
   return (
     <>
-      <h2 className={styles.loadingmsg}>
-        This will take more time with more opponents...
-      </h2>
+      <div className={styles.warning}>
+        <FontAwesomeIcon icon={faCircleExclamation} /> &nbsp;
+        <h2 className={styles.loadingmsg}>Can take up to a minute </h2>&nbsp;
+        <FontAwesomeIcon icon={faCircleExclamation} />
+      </div>
       <p>Meanwhile, stare at this beautiful loader</p>
       <div className={styles.container}>
         <div className={styles.loader}>
