@@ -10,11 +10,11 @@
   flex-direction: column;
   padding: 1rem;
   border-radius: 5px;
-  border: 3px solid #7fa650;
+  border: 3px solid var(--primary-color);
   background-color: #242424;
 
   label {
-    color: #7fa650;
+    color: var(--primary-color);
     font-size: 20px;
   }
 }

@@ -1,0 +1,48 @@
+.rules {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  .score,
+  .target {
+    margin: 0;
+    font-weight: 900;
+    font-size: 1.5rem;
+  }
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 50px);
+  grid-template-rows: repeat(8, 50px);
+  gap: 1px;
+  place-items: center;
+  place-content: center;
+  transform: rotate(90deg) scaleX(-1);
+  margin-block-start: 1rem;
+}
+
+/* fit on mobile screens */
+@media screen and (max-width: 425px) {
+  .board {
+    grid-template-columns: repeat(8, 30px);
+    grid-template-rows: repeat(8, 30px);
+  }
+}
+
+.square {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+.square[data-square^="A"]:nth-of-type(odd),
+.square[data-square^="B"]:nth-of-type(even),
+.square[data-square^="C"]:nth-of-type(odd),
+.square[data-square^="D"]:nth-of-type(even),
+.square[data-square^="E"]:nth-of-type(odd),
+.square[data-square^="F"]:nth-of-type(even),
+.square[data-square^="G"]:nth-of-type(odd),
+.square[data-square^="H"]:nth-of-type(even) {
+  background-color: black;
+}
