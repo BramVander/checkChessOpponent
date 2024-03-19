@@ -5,15 +5,10 @@ import Dashboard from "./components/Dashboard";
 import Error from "./components/UI/Error";
 import Loader from "./components/UI/Loader";
 
-import SquareChallenge from "./components/minigames/SquareChallenge";
-import { useState } from "react";
-
 function App() {
   const { user, isLoading, error, logout } = useChess();
-  let [testGame, setTestGame] = useState(false);
 
   function handleLogout() {
-    setTestGame(false);
     logout();
   }
 
@@ -39,35 +34,11 @@ function App() {
             chess.com
           </a>
         </h1>
-        {!testGame && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "black",
-              padding: "1rem",
-            }}
-          >
-            <button
-              className="btn-primary"
-              onClick={() => setTestGame(true)}
-              style={{
-                backgroundColor: "#d4121e",
-                borderColor: "#d4121e",
-                fontSize: "1rem",
-              }}
-            >
-              Welcome Electude! Click to test minigame
-            </button>
-          </div>
-        )}
-        {!testGame && error && <Error message={error} color="tomato" />}
-        {!testGame && isLoading && <Loader />}
-        {!testGame && !isLoading && !user && <Login />}
-        {!testGame && !isLoading && user && <Dashboard user={user} />}
 
-        {testGame && <SquareChallenge />}
+        {error && <Error message={error} color="tomato" />}
+        {isLoading && <Loader />}
+        {!isLoading && !user && <Login />}
+        {!isLoading && user && <Dashboard user={user} />}
       </main>
     </>
   );
