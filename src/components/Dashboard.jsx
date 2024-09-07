@@ -4,7 +4,7 @@ import DatePicker from "./MonthPicker";
 import styles from "./Dashboard.module.css";
 
 function Dashboard() {
-  const { user, data, games, cheaters, streamers } = useChess();
+  const { games, cheaters, streamers, player } = useChess();
 
   function calcDate(timestamp) {
     const miliSec = new Date(timestamp * 1000);
@@ -31,25 +31,43 @@ function Dashboard() {
     return date;
   }
 
-  const lastOnline = calcDate(data.last_online);
-  const accountCreated = calcDate(data.joined);
+  const renderList = (data, msg) => {
+    // Check if data is empty
+    if (data.length === 0) {
+      return <p>{msg}</p>;
+    }
 
-  const renderList = (data, message) =>
-    Object.keys(games).length > 0 ? (
-      Object.keys(data).length > 0 ? (
-        Array.from(data).map((item, index) => <p key={index}>{item}</p>)
-      ) : (
-        <p>{message}</p>
-      )
-    ) : null;
+    return (
+      <div>
+        {data.map((item, index) =>
+          item.gameUrl ? (
+            <a
+              key={index}
+              href={item.gameUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <p className={styles.links}>{item.username}</p>
+            </a>
+          ) : (
+            <p key={index}>{item.username}</p>
+          )
+        )}
+      </div>
+    );
+  };
+
+  const lastOnline = calcDate(player.last_online);
+  const accountCreated = calcDate(player.joined);
 
   return (
     <>
       <div className={styles.ui}>
         <div className={styles.intro}>
-          <img className={styles.avatar} src={data.avatar} />
+          <img className={styles.avatar} src={player.avatar} />
           <p>
-            Track opponents <strong>{user}</strong> played against <br></br>
+            Track opponents <strong>{player.username}</strong> played against{" "}
+            <br></br>
             Find <strong>cheaters</strong> on the wall of shame &<br></br>
             Find <strong>streamers</strong> in the hall of fame
           </p>
@@ -58,6 +76,7 @@ function Dashboard() {
         <p>
           Account creation: {accountCreated} <br></br>
           Last online: {lastOnline} <br></br>
+          Subscription: {player.status}
         </p>
         <label>Select a month</label>
         <DatePicker></DatePicker>

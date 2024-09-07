@@ -40,4 +40,11 @@
     background-color: #645606;
     border: 3px solid gold;
   }
+  .links {
+    color: white;
+    background: black;
+    text-align: center;
+    width: fit-content;
+    padding-inline: 1rem;
+  }
 }

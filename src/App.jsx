@@ -6,7 +6,7 @@ import Error from "./components/UI/Error";
 import Loader from "./components/UI/Loader";
 
 function App() {
-  const { user, isLoading, error, logout } = useChess();
+  const { isLoading, error, logout, isLoggedIn, player } = useChess();
 
   function handleLogout() {
     logout();
@@ -22,7 +22,7 @@ function App() {
             onClick={handleLogout}
             title="click to go home"
           />
-          {user && (
+          {isLoggedIn && (
             <button className="btn-primary logout" onClick={handleLogout}>
               Logout
             </button>
@@ -37,8 +37,8 @@ function App() {
 
         {error && <Error message={error} color="tomato" />}
         {isLoading && <Loader />}
-        {!isLoading && !user && <Login />}
-        {!isLoading && user && <Dashboard user={user} />}
+        {!isLoading && !isLoggedIn && <Login />}
+        {!isLoading && isLoggedIn && <Dashboard user={player} />}
       </main>
     </>
   );

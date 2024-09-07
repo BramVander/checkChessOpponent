@@ -1,0 +1,61 @@
+{
+  "login": {
+    "fetchPlayer": {
+      "id": "https://api.chess.com/pub/player/hikaru",
+      "avatar": "https://images.chesscomfiles.com/uploads/v1/user/15448422.88c010c1.200x200o.3c5619f5441e.png",
+      "country": "https://api.chess.com/pub/country/US",
+      "followers": 1212209,
+      "is_streamer": true,
+      "joined": 1389043258,
+      "last_online": 1725646356,
+      "league": "Legend",
+      "location": "Florida",
+      "name": "Hikaru Nakamura",
+      "player_id": 15448422,
+      "status": "premium",
+      "streaming_platforms": [],
+      "title": "GM",
+      "twitch_url": "https://twitch.tv/gmhikaru",
+      "url": "https://www.chess.com/member/Hikaru",
+      "username": "hikaru",
+      "verified": false
+    }
+  },
+
+  "checkOpponents": {
+    "fetchGames": {
+      "accuracies": {
+        "black": 84.03,
+        "white": 91.6
+      },
+      "black": {
+        "id": "https://api.chess.com/pub/player/shimogatactician",
+        "rating": 2541,
+        "result": "resigned",
+        "username": "ShimogaTactician",
+        "uuid": "64d57e64-7997-11e9-a6f6-9710399301f8"
+      },
+      "end_time": 1725375976,
+      "fen": "1kr4r/pb6/2P5/3q3p/R2NpNn1/2Q3P1/1P5P/5RK1 b - -",
+      "initial_setup": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2024.09.03\"]\n[Round \"-\"]\n[White \"Hikaru\"]\n[Black \"ShimogaTactician\"]\n[Result \"1-0\"]\n[Tournament \"https://www.chess.com/tournament/live/early-titled-tuesday-blitz-september-03-2024-5033915\"]\n[CurrentPosition \"1kr4r/pb6/2P5/3q3p/R2NpNn1/2Q3P1/1P5P/5RK1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"A45\"]\n[ECOUrl \"https://www.chess.com/openings/Trompowsky-Attack-Classical-Defense-3.Nd2-h6-4.Bh4\"]\n[UTCDate \"2024.09.03\"]\n[UTCTime \"14:59:54\"]\n[WhiteElo \"3255\"]\n[BlackElo \"2541\"]\n[TimeControl \"180+1\"]\n[Termination \"Hikaru won by resignation\"]\n[StartTime \"14:59:54\"]\n[EndDate \"2024.09.03\"]\n[EndTime \"15:06:16\"]\n[Link \"https://www.chess.com/game/live/119114450325\"]\n\n1. d4 {[%clk 0:02:54.8]} 1... Nf6 {[%clk 0:02:49.9]} 2. Bg5 {[%clk 0:02:54.2]} 2... e6 {[%clk 0:02:42.4]} 3. Nd2 {[%clk 0:02:52.9]} 3... h6 {[%clk 0:02:42.1]} 4. Bh4 {[%clk 0:02:52.7]} 4... d6 {[%clk 0:02:42]} 5. e4 {[%clk 0:02:52.9]} 5... Nbd7 {[%clk 0:02:41]} 6. Bd3 {[%clk 0:02:53]} 6... b6 {[%clk 0:02:28.5]} 7. f4 {[%clk 0:02:49.4]} 7... Bb7 {[%clk 0:02:24.9]} 8. Ngf3 {[%clk 0:02:49.6]} 8... Be7 {[%clk 0:02:21.2]} 9. O-O {[%clk 0:02:49.4]} 9... Nh5 {[%clk 0:02:21.3]} 10. Bxe7 {[%clk 0:02:46.5]} 10... Qxe7 {[%clk 0:02:22.2]} 11. g3 {[%clk 0:02:35.4]} 11... g5 {[%clk 0:02:11.7]} 12. Ne1 {[%clk 0:02:34.9]} 12... Nhf6 {[%clk 0:02:09.6]} 13. c3 {[%clk 0:02:27.3]} 13... gxf4 {[%clk 0:01:54.3]} 14. Rxf4 {[%clk 0:02:26.8]} 14... e5 {[%clk 0:01:54.1]} 15. Rf2 {[%clk 0:02:26.9]} 15... h5 {[%clk 0:01:52.7]} 16. Ng2 {[%clk 0:02:20.8]} 16... Ng4 {[%clk 0:01:46.4]} 17. Rf1 {[%clk 0:02:20.9]} 17... O-O-O {[%clk 0:01:46.4]} 18. Qf3 {[%clk 0:02:16.9]} 18... Rdg8 {[%clk 0:01:32.9]} 19. Qxf7 {[%clk 0:02:09.2]} 19... Qd8 {[%clk 0:01:33.1]} 20. Nf3 {[%clk 0:02:00]} 20... Rf8 {[%clk 0:01:09.3]} 21. Qb3 {[%clk 0:01:59.2]} 21... Kb8 {[%clk 0:00:53.8]} 22. a4 {[%clk 0:01:45.4]} 22... exd4 {[%clk 0:00:44.6]} 23. cxd4 {[%clk 0:01:42.8]} 23... Ndf6 {[%clk 0:00:44.8]} 24. Qc2 {[%clk 0:01:40.3]} 24... d5 {[%clk 0:00:43.8]} 25. e5 {[%clk 0:01:32.2]} 25... Ne4 {[%clk 0:00:43.3]} 26. a5 {[%clk 0:01:26.9]} 26... c5 {[%clk 0:00:22.3]} 27. axb6 {[%clk 0:01:26.1]} 27... Qxb6 {[%clk 0:00:23.2]} 28. Bxe4 {[%clk 0:01:10.2]} 28... dxe4 {[%clk 0:00:23.2]} 29. dxc5 {[%clk 0:01:10.4]} 29... Qe6 {[%clk 0:00:16.8]} 30. Nd4 {[%clk 0:01:05.6]} 30... Qxe5 {[%clk 0:00:16.7]} 31. Qc3 {[%clk 0:01:05.1]} 31... Rd8 {[%clk 0:00:13.4]} 32. Ra4 {[%clk 0:01:00.7]} 32... Rc8 {[%clk 0:00:05.2]} 33. c6 {[%clk 0:01:00.7]} 33... Qd5 {[%clk 0:00:05.2]} 34. Nf4 {[%clk 0:00:59.8]} 1-0\n",
+      "rated": true,
+      "rules": "chess",
+      "tcn": "lB!TcM0Sbl3VMFZRmC5ZftXPnD6Xgv90egTNF070ow2MveNTksMDfDSKDnVNeoTEnf86dv7!v107lv!91r65iyKBsBZTrkRJCKTCyGYIGP7PtCJCBIPSvBSKks97ay76IQKJoD",
+      "time_class": "blitz",
+      "time_control": "180+1",
+      "tournament": "https://api.chess.com/pub/tournament/early-titled-tuesday-blitz-september-03-2024-5033915",
+      "url": "https://www.chess.com/game/live/119114450325",
+      "uuid": "31b41219-6a05-11ef-a6d9-6cfe544c0428",
+      "white": {
+        "id": "https://api.chess.com/pub/player/hikaru",
+        "rating": 3255,
+        "result": "win",
+        "username": "Hikaru",
+        "uuid": "6f4deb88-7718-11e3-8016-000000000000"
+      }
+    }
+  },
+
+  "next": {}
+}

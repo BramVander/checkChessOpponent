@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { createContext, useContext, useEffect, useReducer } from "react";
 
 const BASE_URL = "https://api.chess.com/pub/player";
@@ -5,8 +6,30 @@ const BASE_URL = "https://api.chess.com/pub/player";
 const ChessContext = createContext();
 
 const initialState = {
-  user: "",
+  isLoggedIn: false,
+  error: "",
+  isLoading: false,
   player: {
+    id: "",
+    avatar: "",
+    country: "",
+    followers: null,
+    is_streamer: false,
+    joined: null,
+    last_online: null,
+    league: "",
+    location: "",
+    name: "",
+    player_id: null,
+    status: "",
+    streaming_platforms: [],
+    title: "",
+    twitch_url: "",
+    url: "",
+    username: "",
+    verified: false,
+  },
+  rating: {
     name: "",
     status: "",
     fide: null,
@@ -16,11 +39,8 @@ const initialState = {
     losses: null,
     draws: null,
   },
-  error: "",
-  isLoading: false,
-  data: {},
   games: [],
-  opponents: new Set(),
+  opponents: [],
   cheaters: [],
   streamers: [],
 };
@@ -32,21 +52,18 @@ function reducer(state, action) {
         ...state,
         isLoading: true,
       };
-    case "login":
+    case "newLogin":
       return {
         ...state,
-        isLoading: false,
-        error: "",
-        user: action.payload.user,
-        data: action.payload.data,
+        isLoggedIn: action.payload.data.username.length > 0,
+        player: action.payload.data,
       };
     case "logout":
       return {
-        user: "",
-        player: {},
+        isLoggedIn: false,
+        rating: {},
         isLoading: false,
         error: "",
-        data: {},
         games: [],
         opponents: new Set(),
         cheaters: [],
@@ -62,7 +79,7 @@ function reducer(state, action) {
     case "data/rating":
       return {
         ...state,
-        player: {
+        rating: {
           status: state.player.status,
           fide: action.payload.fide,
           best: action.payload.chess_rapid?.best.rating,
@@ -76,20 +93,29 @@ function reducer(state, action) {
       };
     case "data/opponents": {
       const unique = new Set();
+      const uniqueOpponents = [];
 
       for (const game of action.payload) {
-        unique.add(
-          game.white.username.toLowerCase() === state.user.toLowerCase()
-            ? game.black.username.toLowerCase()
-            : game.white.username.toLowerCase()
-        );
+        const opponent = {
+          username:
+            game.white.username.toLowerCase() ===
+            state.player.username.toLowerCase()
+              ? game.black.username.toLowerCase()
+              : game.white.username.toLowerCase(),
+          gameUrl: game.url,
+        };
+
+        if (!unique.has(opponent.username)) {
+          unique.add(opponent.username);
+          uniqueOpponents.push(opponent);
+        }
       }
 
       return {
         ...state,
         error: "",
         games: action.payload,
-        opponents: unique,
+        opponents: uniqueOpponents,
       };
     }
     case "data/checkOpponents":
@@ -103,7 +129,7 @@ function reducer(state, action) {
     case "dataFailed":
       return {
         ...state,
-        player: {},
+        rating: {},
         games: [],
         cheaters: [],
         streamers: [],
@@ -124,11 +150,11 @@ function reducer(state, action) {
 function ChessProvider({ children }) {
   const [
     {
-      user,
+      isLoggedIn,
       player,
+      rating,
       error,
       isLoading,
-      data,
       games,
       opponents,
       cheaters,
@@ -143,9 +169,10 @@ function ChessProvider({ children }) {
       const foundStreamers = [];
 
       for (const opponent of opponents) {
+        // console.log("opponent", opponent.username);
         try {
           const res = await fetch(
-            `https://api.chess.com/pub/player/${opponent}`
+            `https://api.chess.com/pub/player/${opponent.username}`
           );
           const data = await res.json();
 
@@ -176,13 +203,13 @@ function ChessProvider({ children }) {
     try {
       const res = await fetch(`${BASE_URL}/${user}`);
       const data = await res.json();
-      // console.log(data);
+      // console.log("login", data);
 
       if (data.message) throw new Error(data.message);
 
       dispatch({
-        type: "login",
-        payload: { user: user, data: data },
+        type: "newLogin",
+        payload: { isLoggedIn: data, data: data },
       });
     } catch (error) {
       dispatch({ type: "dataFailed", payload: error.message });
@@ -241,21 +268,23 @@ function ChessProvider({ children }) {
   }
 
   async function fetchOpponents(year, month) {
-    if (user === initialState.user) return;
+    if (player.username === initialState.user) return;
 
     dispatch({ type: "loading" });
 
     try {
       const res = await fetch(
-        `https://api.chess.com/pub/player/${user}/games/${year}/${month}`
+        `https://api.chess.com/pub/player/${player.username}/games/${year}/${month}`
       );
       const data = await res.json();
-      // console.log(data.games.length === 0);
+      // console.log(data.games);
 
       if (data.games && data.games.length === 0)
         throw new Error("No games found this month");
 
       if (data.message) throw new Error(data.message);
+
+      // console.log("data", data);
 
       dispatch({
         type: "data/opponents",
@@ -269,11 +298,11 @@ function ChessProvider({ children }) {
   return (
     <ChessContext.Provider
       value={{
-        user,
+        isLoggedIn,
+        rating,
         player,
         error,
         isLoading,
-        data,
         games,
         opponents,
         cheaters,

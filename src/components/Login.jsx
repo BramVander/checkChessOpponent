@@ -2,7 +2,7 @@ import { useChess } from "../Context/ChessContext";
 import Stats from "./Stats";
 
 function Login() {
-  const { player, login, checkSuspect, checkRating } = useChess();
+  const { rating, login, checkSuspect, checkRating } = useChess();
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -22,7 +22,13 @@ function Login() {
   return (
     <>
       <form onSubmit={handleLogin}>
-        <input id="username" type="text" placeholder="Username" required />
+        <input
+          id="username"
+          type="text"
+          defaultValue="hikaru"
+          placeholder="Username"
+          required
+        />
         <button className="btn-primary">Check my opponents</button>
       </form>
 
@@ -30,7 +36,7 @@ function Login() {
       <form onSubmit={handleCheckSuspect}>
         <input id="opponent" type="text" placeholder="Opponent" required />
         <button className="btn-primary">Check specific player</button>
-        {player.status && <Stats player={player} />}
+        {rating.status && <Stats player={rating} />}
       </form>
     </>
   );
