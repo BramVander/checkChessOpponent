@@ -2,6 +2,22 @@ import { useChess } from "../Context/ChessContext";
 import DatePicker from "./MonthPicker";
 
 import styles from "./Dashboard.module.css";
+import styled from "styled-components";
+
+const FormRow = styled.div`
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr;
+`;
+
+const Link = styled.a`
+  color: white;
+  background: black;
+  text-align: center;
+  width: fit-content;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+`;
 
 function Dashboard() {
   const { games, cheaters, streamers, player } = useChess();
@@ -39,20 +55,18 @@ function Dashboard() {
 
     return (
       <div>
-        {data.map((item, index) =>
-          item.gameUrl ? (
-            <a
-              key={index}
-              href={item.gameUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <p className={styles.links}>{item.username}</p>
-            </a>
-          ) : (
-            <p key={index}>{item.username}</p>
-          )
-        )}
+        {data.map((item, index) => (
+          <FormRow key={index}>
+            <Link href={item.gameUrl} target="_blank">
+              Game vs {item.username}
+            </Link>
+            {item.twitch && (
+              <Link href={item.twitch} target="_blank">
+                {item.twitch}
+              </Link>
+            )}
+          </FormRow>
+        ))}
       </div>
     );
   };

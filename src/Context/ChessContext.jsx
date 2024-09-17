@@ -169,7 +169,7 @@ function ChessProvider({ children }) {
       const foundStreamers = [];
 
       for (const opponent of opponents) {
-        // console.log("opponent", opponent.username);
+        // console.log("opponent", opponent);
         try {
           const res = await fetch(
             `https://api.chess.com/pub/player/${opponent.username}`
@@ -180,9 +180,11 @@ function ChessProvider({ children }) {
             foundCheaters.push(opponent);
           }
           if (data.is_streamer === true) {
+            if (data.twitch_url) {
+              opponent.twitch = data.twitch_url;
+            }
             foundStreamers.push(opponent);
           }
-          // if(data.twitch_url) foundStreamers.push(data.twitch_url)
         } catch (error) {
           console.error(error);
         }
