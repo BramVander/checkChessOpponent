@@ -5,46 +5,36 @@ const BASE_URL = "https://api.chess.com/pub/player";
 
 const ChessContext = createContext();
 
+//state
 const initialState = {
-  isLoggedIn: false,
-  error: "",
   isLoading: false,
+  isLoggedIn: false,
+  error: '',
   player: {
-    id: "",
-    avatar: "",
-    country: "",
-    followers: null,
-    is_streamer: false,
-    joined: null,
-    last_online: null,
-    league: "",
-    location: "",
-    name: "",
-    player_id: null,
-    status: "",
-    streaming_platforms: [],
-    title: "",
-    twitch_url: "",
-    url: "",
-    username: "",
-    verified: false,
+    name: '',
+    avatar: '',
+    subscription: '',
+    joined: '',
+    last_online: ''
   },
-  rating: {
-    name: "",
-    status: "",
-    fide: null,
-    best: null,
-    last: null,
-    wins: null,
-    losses: null,
-    draws: null,
+  suspect: {
+    status: '',
+    wins: 0,
+    losses: 0,
+    draws: 0,
+    rating: {
+      best: 0,
+      latest: 0,
+      fide: 0,
+    }
   },
-  games: [],
-  opponents: [],
+  opponents: [], // opponent { username: '', gameUrls: []}
   cheaters: [],
-  streamers: [],
-};
+  streamers: []
+}
+// /state
 
+// reducer
 function reducer(state, action) {
   switch (action.type) {
     case "loading":
@@ -52,96 +42,94 @@ function reducer(state, action) {
         ...state,
         isLoading: true,
       };
-    case "newLogin":
+    case "login":
       return {
         ...state,
+        isLoading: false,
         isLoggedIn: action.payload.data.username.length > 0,
         player: action.payload.data,
       };
     case "logout":
       return {
-        isLoggedIn: false,
-        rating: {},
-        isLoading: false,
-        error: "",
-        games: [],
-        opponents: new Set(),
-        cheaters: [],
-        streamers: [],
+        ...initialState
       };
     case "data/player":
       return {
         ...state,
-        player: { status: action.payload },
         isLoading: false,
-        error: "",
+        player: action.payload
+      };
+    case "data/suspect":
+      return {
+        ...state,
+        isLoading: false,
+        suspect: {
+          status: action.payload,
+          wins: state.suspect.wins,
+          losses: state.suspect.losses,
+          draws: state.suspect.draws,
+          rating: {
+            best: state.suspect.rating.best,
+            latest: state.suspect.rating.latest,
+            fide: state.suspect.rating.fide
+          },
+        }
+      };
+    case "data/opponents":
+      // eslint-disable-next-line no-case-declarations
+      const playedGames = [];
+      for (const game of action.payload) {
+        // make opponent
+        const opponent = {
+          username:
+              game.white.username.toLowerCase() ===
+              state.player.username.toLowerCase()
+                  ? game.black.username.toLowerCase()
+                  : game.white.username.toLowerCase(),
+          gameUrls: [game.url],
+        };
+        // group games per opponent
+        for(const playedGame of playedGames) {
+          if (playedGame.username === opponent.username) {
+            playedGame.gameUrls = [playedGame.gameUrls + game.url]
+          } else {
+            playedGames.push(opponent);
+          }
+        }
+      }
+      return {
+        ...state,
+        isLoading: false,
+        opponents: playedGames
       };
     case "data/rating":
       return {
         ...state,
-        rating: {
-          status: state.player.status,
-          fide: action.payload.fide,
-          best: action.payload.chess_rapid?.best.rating,
-          last: action.payload.chess_rapid?.last.rating,
+        isLoading: false,
+        suspect: {
+          status: state.suspect.status,
           wins: action.payload.chess_rapid?.record.win,
           losses: action.payload.chess_rapid?.record.loss,
           draws: action.payload.chess_rapid?.record.draw,
-        },
-        isLoading: false,
-        error: "",
-      };
-    case "data/opponents": {
-      const unique = new Set();
-      const uniqueOpponents = [];
-
-      for (const game of action.payload) {
-        const opponent = {
-          username:
-            game.white.username.toLowerCase() ===
-            state.player.username.toLowerCase()
-              ? game.black.username.toLowerCase()
-              : game.white.username.toLowerCase(),
-          gameUrl: game.url,
-        };
-
-        if (!unique.has(opponent.username)) {
-          unique.add(opponent.username);
-          uniqueOpponents.push(opponent);
+          rating: {
+            best: action.payload.chess_raid?.best.rating,
+            latest: action.payload.chess_rapid?.last.rating,
+            fide: action.payload.fide,
+          }
         }
-      }
-
-      return {
-        ...state,
-        error: "",
-        games: action.payload,
-        opponents: uniqueOpponents,
       };
-    }
-    case "data/checkOpponents":
+    case "data/failed":
+      return {
+        ...initialState,
+        error: action.payload,
+      };
+    case "opponents/check":
       return {
         ...state,
-        error: "",
         isLoading: false,
         cheaters: action.payload.cheaters,
         streamers: action.payload.streamers,
-      };
-    case "dataFailed":
-      return {
-        ...state,
-        rating: {},
-        games: [],
-        cheaters: [],
-        streamers: [],
-        isLoading: false,
-        error: action.payload,
-      };
-    case "account/closed":
-      return {
-        ...state,
-        isLoading: false,
-        player: { status: action.payload },
-      };
+      }
     default:
       throw new Error("Action unknown");
   }
@@ -150,15 +138,14 @@ function reducer(state, action) {
 function ChessProvider({ children }) {
   const [
     {
-      isLoggedIn,
-      player,
-      rating,
-      error,
       isLoading,
-      games,
+      isLoggedIn,
+      error,
+      player,
+      suspect,
       opponents,
       cheaters,
-      streamers,
+      streamers
     },
     dispatch,
   ] = useReducer(reducer, initialState);
@@ -169,14 +156,13 @@ function ChessProvider({ children }) {
       const foundStreamers = [];
 
       for (const opponent of opponents) {
-        // console.log("opponent", opponent);
         try {
           const res = await fetch(
             `https://api.chess.com/pub/player/${opponent.username}`
           );
           const data = await res.json();
 
-          if (data.status === "closed:fair_play_violations") {
+          if (data.status === "closed:fair_play_violations" || data.status === "closed:abuse") {
             foundCheaters.push(opponent);
           }
           if (data.is_streamer === true) {
@@ -191,7 +177,7 @@ function ChessProvider({ children }) {
       }
 
       dispatch({
-        type: "data/checkOpponents",
+        type: "opponents/check",
         payload: { cheaters: foundCheaters, streamers: foundStreamers },
       });
     };
@@ -205,16 +191,16 @@ function ChessProvider({ children }) {
     try {
       const res = await fetch(`${BASE_URL}/${user}`);
       const data = await res.json();
-      // console.log("login", data);
+      console.log("login", data);
 
       if (data.message) throw new Error(data.message);
 
       dispatch({
-        type: "newLogin",
+        type: "login",
         payload: { isLoggedIn: data, data: data },
       });
     } catch (error) {
-      dispatch({ type: "dataFailed", payload: error.message });
+      dispatch({ type: "data/failed", payload: error.message });
     }
   }
 
@@ -228,31 +214,29 @@ function ChessProvider({ children }) {
     try {
       const res = await fetch(`https://api.chess.com/pub/player/${opponent}`);
       const data = await res.json();
+      let status = '';
 
       if (data.message) throw new Error(data.message);
 
-      // console.log("data", data);
-
-      if (
-        data.status === "closed:abuse" ||
-        data.status === "closed:fair_play_violations"
-      ) {
-        dispatch({
-          type: "data/player",
-          payload: data.status,
-        });
+      if (data.status === "closed:abuse" || data.status === "closed:fair_play_violations") {
+        status = data.status;
       } else {
-        dispatch({
-          type: "data/player",
-          payload: "No violations found (yet)",
-        });
+        status = "No violations found (yet)"
       }
+
+      // console.log('status', status);
+
+      dispatch({
+        type: "data/suspect",
+        payload: status,
+      });
     } catch (error) {
-      dispatch({ type: "dataFailed", payload: error.message });
+      dispatch({ type: "data/failed", payload: error.message });
     }
   }
 
   async function checkRating(opponent) {
+    console.log('opponent', opponent);
     if (opponent === " ") return;
 
     try {
@@ -261,11 +245,13 @@ function ChessProvider({ children }) {
       );
       const data = await res.json();
 
+      // console.log('checkRating', data);
+
       if (data.message) throw new Error(data.message);
 
       dispatch({ type: "data/rating", payload: data });
     } catch (error) {
-      dispatch({ type: "dataFailed", payload: error.message });
+      dispatch({ type: "data/failed", payload: error.message });
     }
   }
 
@@ -279,33 +265,32 @@ function ChessProvider({ children }) {
         `https://api.chess.com/pub/player/${player.username}/games/${year}/${month}`
       );
       const data = await res.json();
-      // console.log(data.games);
+      // console.log('fetchOpponents', data);
 
       if (data.games && data.games.length === 0)
         throw new Error("No games found this month");
 
       if (data.message) throw new Error(data.message);
 
-      // console.log("data", data);
+      console.log("data.games?", data.games);
 
       dispatch({
         type: "data/opponents",
         payload: data.games,
       });
     } catch (error) {
-      dispatch({ type: "dataFailed", payload: error.message });
+      dispatch({ type: "data/failed", payload: error.message });
     }
   }
 
   return (
     <ChessContext.Provider
       value={{
-        isLoggedIn,
-        rating,
-        player,
-        error,
         isLoading,
-        games,
+        isLoggedIn,
+        error,
+        player,
+        suspect,
         opponents,
         cheaters,
         streamers,

@@ -20,7 +20,9 @@ const Link = styled.a`
 `;
 
 function Dashboard() {
-  const { games, cheaters, streamers, player } = useChess();
+  const { opponents, cheaters, streamers, player } = useChess();
+
+  console.log(opponents);
 
   function calcDate(timestamp) {
     const miliSec = new Date(timestamp * 1000);
@@ -96,9 +98,9 @@ function Dashboard() {
         <DatePicker></DatePicker>
       </div>
 
-      {games.length > 0 && (
+      {opponents.gameUrls.length > 0 && (
         <h2>
-          Found {games.length} opponents, of which {cheaters.length} cheaters
+          Found {opponents.gameUrls.length} opponents, of which {cheaters.length} cheaters
           and {streamers.length} streamers
         </h2>
       )}
