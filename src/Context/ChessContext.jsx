@@ -89,17 +89,10 @@ function reducer(state, action) {
           gameUrls: [game.url],
         };
         // group games per opponent
-        for(const playedGame of playedGames) {
-          if (playedGame.username === opponent.username) {
-            playedGame.gameUrls = [playedGame.gameUrls + game.url]
-          } else {
-            playedGames.push(opponent);
-          }
-        }
+        playedGames.push(opponent);
       }
       return {
         ...state,
-        isLoading: false,
         opponents: playedGames
       };
     case "data/rating":
@@ -155,6 +148,9 @@ function ChessProvider({ children }) {
       const foundCheaters = [];
       const foundStreamers = [];
 
+      console.log('oppo', opponents);
+
+
       for (const opponent of opponents) {
         try {
           const res = await fetch(
@@ -176,6 +172,9 @@ function ChessProvider({ children }) {
         }
       }
 
+      console.log('cheat', foundCheaters);
+      console.log('stream', foundStreamers);
+
       dispatch({
         type: "opponents/check",
         payload: { cheaters: foundCheaters, streamers: foundStreamers },
@@ -191,7 +190,7 @@ function ChessProvider({ children }) {
     try {
       const res = await fetch(`${BASE_URL}/${user}`);
       const data = await res.json();
-      console.log("login", data);
+      // console.log("login", data);
 
       if (data.message) throw new Error(data.message);
 
@@ -236,7 +235,6 @@ function ChessProvider({ children }) {
   }
 
   async function checkRating(opponent) {
-    console.log('opponent', opponent);
     if (opponent === " ") return;
 
     try {
@@ -265,14 +263,11 @@ function ChessProvider({ children }) {
         `https://api.chess.com/pub/player/${player.username}/games/${year}/${month}`
       );
       const data = await res.json();
-      // console.log('fetchOpponents', data);
 
       if (data.games && data.games.length === 0)
         throw new Error("No games found this month");
 
       if (data.message) throw new Error(data.message);
-
-      console.log("data.games?", data.games);
 
       dispatch({
         type: "data/opponents",
