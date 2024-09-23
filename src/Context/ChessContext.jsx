@@ -28,9 +28,7 @@ const initialState = {
       fide: 0,
     }
   },
-  opponents: [], // opponent { username: '', gameUrls: []}
-  cheaters: [],
-  streamers: []
+  opponents: [],
 }
 // /state
 
@@ -53,12 +51,6 @@ function reducer(state, action) {
       return {
         ...initialState
       };
-    case "data/player":
-      return {
-        ...state,
-        isLoading: false,
-        player: action.payload
-      };
     case "data/suspect":
       return {
         ...state,
@@ -75,9 +67,9 @@ function reducer(state, action) {
           },
         }
       };
-    case "data/opponents":
-      // eslint-disable-next-line no-case-declarations
+    case "data/opponents": {
       const playedGames = [];
+      let unique;
       for (const game of action.payload) {
         // make opponent
         const opponent = {
@@ -86,15 +78,27 @@ function reducer(state, action) {
               state.player.username.toLowerCase()
                   ? game.black.username.toLowerCase()
                   : game.white.username.toLowerCase(),
-          gameUrls: [game.url],
+          gameUrls: game.url,
         };
-        // group games per opponent
+
         playedGames.push(opponent);
+
+        // map games per opponent
+        unique = Array.from(new Set(playedGames.map(e => e.username))).map(
+          user => {
+            return {
+              username: user,
+              gameUrls: playedGames.filter(e => e.username === user).map(e => e.gameUrls),
+            }
+          }
+        )
       }
+
       return {
         ...state,
-        opponents: playedGames
+        opponents: unique
       };
+    }
     case "data/rating":
       return {
         ...state,
@@ -120,8 +124,7 @@ function reducer(state, action) {
       return {
         ...state,
         isLoading: false,
-        cheaters: action.payload.cheaters,
-        streamers: action.payload.streamers,
+        opponents: action.payload
       }
     default:
       throw new Error("Action unknown");
@@ -137,20 +140,12 @@ function ChessProvider({ children }) {
       player,
       suspect,
       opponents,
-      cheaters,
-      streamers
     },
     dispatch,
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     const checkOpponents = async () => {
-      const foundCheaters = [];
-      const foundStreamers = [];
-
-      console.log('oppo', opponents);
-
-
       for (const opponent of opponents) {
         try {
           const res = await fetch(
@@ -159,25 +154,25 @@ function ChessProvider({ children }) {
           const data = await res.json();
 
           if (data.status === "closed:fair_play_violations" || data.status === "closed:abuse") {
-            foundCheaters.push(opponent);
+            opponent.isCheater == true;
           }
           if (data.is_streamer === true) {
+            opponent.isStreamer = true;
             if (data.twitch_url) {
               opponent.twitch = data.twitch_url;
             }
-            foundStreamers.push(opponent);
           }
+
         } catch (error) {
           console.error(error);
         }
       }
 
-      console.log('cheat', foundCheaters);
-      console.log('stream', foundStreamers);
+      console.log('updated opponents', opponents)
 
       dispatch({
         type: "opponents/check",
-        payload: { cheaters: foundCheaters, streamers: foundStreamers },
+        payload: opponents,
       });
     };
 
@@ -190,7 +185,6 @@ function ChessProvider({ children }) {
     try {
       const res = await fetch(`${BASE_URL}/${user}`);
       const data = await res.json();
-      // console.log("login", data);
 
       if (data.message) throw new Error(data.message);
 
@@ -217,13 +211,10 @@ function ChessProvider({ children }) {
 
       if (data.message) throw new Error(data.message);
 
-      if (data.status === "closed:abuse" || data.status === "closed:fair_play_violations") {
-        status = data.status;
-      } else {
-        status = "No violations found (yet)"
-      }
-
-      // console.log('status', status);
+      data.status === "closed:abuse" ||
+      data.status === "closed:fair_play_violations"
+        ? status = data.status
+        : status = "No violations found (yet)"
 
       dispatch({
         type: "data/suspect",
@@ -242,8 +233,6 @@ function ChessProvider({ children }) {
         `https://api.chess.com/pub/player/${opponent}/stats`
       );
       const data = await res.json();
-
-      // console.log('checkRating', data);
 
       if (data.message) throw new Error(data.message);
 
@@ -287,8 +276,6 @@ function ChessProvider({ children }) {
         player,
         suspect,
         opponents,
-        cheaters,
-        streamers,
 
         login,
         logout,

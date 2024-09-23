@@ -3,6 +3,7 @@ import DatePicker from "./MonthPicker";
 
 import styles from "./Dashboard.module.css";
 import styled from "styled-components";
+import {useState} from "react";
 
 const FormRow = styled.div`
   display: grid;
@@ -20,7 +21,8 @@ const Link = styled.a`
 `;
 
 function Dashboard() {
-  const { cheaters, streamers, player } = useChess();
+  const { opponents, player } = useChess();
+  const [showGames, setShowGames] = useState(false);
 
   function calcDate(timestamp) {
     const miliSec = new Date(timestamp * 1000);
@@ -47,84 +49,67 @@ function Dashboard() {
     return date;
   }
 
-  const renderList = (data, msg) => {
+  function makeList(data, msg) {
     // Check if data is empty
     if (data.length === 0) {
       return <p>{msg}</p>;
     }
-    
-    const result = Array.from(new Set(data.map(e => e.username))).map(
-      user => {
-        return {
-          username: user,
-          gameUrls: data.filter(e => e.username === user).map(e => e.gameUrls)
-        }
-      }
-    )
-
-    // console.log('r', result);
 
     return (
-      <div>
-        {result.map((item, index) => (
-          <FormRow key={index}>
-            <Link href={item.gameUrl} target="_blank">
-              Game vs {item.username}
-            </Link>
-            {item.twitch && (
-              <Link href={item.twitch} target="_blank">
-                {item.twitch}
-              </Link>
-            )}
-          </FormRow>
-        ))}
-      </div>
-    );
-  };
+        <div>
+          {opponents.map((opponent, index) => {
+            <FormRow key={index}>
+              <div onClick={() => setShowGames(!showGames)}>{opponent.username}</div>
+              {showGames && opponent.gameUrls.map((gameUrl, i) => {
+                <Link href={gameUrl} target="_blank">Game {i}</Link>
+              })}
+              {opponent.twitch && <Link href={opponent.twitch} target="_blank">{opponent.twitch}</Link>}
+            </FormRow>
+          })}
+        </div>
+    )
+  }
 
   const lastOnline = calcDate(player.last_online);
   const accountCreated = calcDate(player.joined);
 
+  console.log('opponents', opponents);
+
   return (
-    <>
-      <div className={styles.ui}>
-        <div className={styles.intro}>
-          <img className={styles.avatar} src={player.avatar} />
+      <>
+        <div className={styles.ui}>
+          <div className={styles.intro}>
+            <img className={styles.avatar} src={player.avatar}/>
+            <p>
+              Track opponents <strong>{player.username}</strong> played against{" "}
+              <br></br>
+              Find <strong>cheaters</strong> on the wall of shame &<br></br>
+              Find <strong>streamers</strong> in the hall of fame
+            </p>
+          </div>
+
           <p>
-            Track opponents <strong>{player.username}</strong> played against{" "}
-            <br></br>
-            Find <strong>cheaters</strong> on the wall of shame &<br></br>
-            Find <strong>streamers</strong> in the hall of fame
+            Account creation: {accountCreated} <br></br>
+            Last online: {lastOnline} <br></br>
+            Subscription: {player.status}
           </p>
+          <label>Select a month</label>
+          <DatePicker></DatePicker>
         </div>
 
-        <p>
-          Account creation: {accountCreated} <br></br>
-          Last online: {lastOnline} <br></br>
-          Subscription: {player.status}
-        </p>
-        <label>Select a month</label>
-        <DatePicker></DatePicker>
-      </div>
+        {opponents && <h2>Found {opponents.length} opponents, of which {opponents.filter((opp) => opp.isCheater).length} cheaters and {opponents.filter((opp) => opp.isStreamer).length} streamers</h2>}
 
-      {/*{opponents && opponents.gameUrls.length > 0 && (*/}
-      {/*  <h2>*/}
-      {/*    Found {opponents.gameUrls.length} opponents, of which {cheaters.length} cheaters*/}
-      {/*    and {streamers.length} streamers*/}
-      {/*  </h2>*/}
-      {/*)}*/}
-
-      <div className={styles.results}>
-        <div className={styles.box + " " + styles.cheaters}>
-          <h2>Wall of shame</h2>
-          {renderList(cheaters, "No Cheaters found")}
+        <div className={styles.results}>
+          <div className={styles.box + " " + styles.cheaters}>
+            <h2>Wall of shame</h2>
+            {makeList(opponents.filter((opp) => opp.isCheater), 'No Cheaters found')}
+          </div>
+          <div className={styles.box + " " + styles.streamers}>
+            <h2>Hall of fame</h2>
+            {makeList(opponents.filter((opp) => opp.isStreamer), 'No Cheaters found')}
+          </div>
         </div>
-        <div className={styles.box + " " + styles.streamers}>
-          <h2>Hall of fame</h2>
-          {renderList(streamers, "No Streamers found")}
-        </div>
-      </div>
-    </>
+      </>
   );
 }
 
