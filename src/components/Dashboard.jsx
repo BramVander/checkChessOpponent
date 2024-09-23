@@ -20,9 +20,7 @@ const Link = styled.a`
 `;
 
 function Dashboard() {
-  const { opponents, cheaters, streamers, player } = useChess();
-
-  console.log(opponents);
+  const { cheaters, streamers, player } = useChess();
 
   function calcDate(timestamp) {
     const miliSec = new Date(timestamp * 1000);
@@ -54,10 +52,21 @@ function Dashboard() {
     if (data.length === 0) {
       return <p>{msg}</p>;
     }
+    
+    const result = Array.from(new Set(data.map(e => e.username))).map(
+      user => {
+        return {
+          username: user,
+          gameUrls: data.filter(e => e.username === user).map(e => e.gameUrls)
+        }
+      }
+    )
+
+    // console.log('r', result);
 
     return (
       <div>
-        {data.map((item, index) => (
+        {result.map((item, index) => (
           <FormRow key={index}>
             <Link href={item.gameUrl} target="_blank">
               Game vs {item.username}
@@ -98,12 +107,12 @@ function Dashboard() {
         <DatePicker></DatePicker>
       </div>
 
-      {opponents.gameUrls.length > 0 && (
-        <h2>
-          Found {opponents.gameUrls.length} opponents, of which {cheaters.length} cheaters
-          and {streamers.length} streamers
-        </h2>
-      )}
+      {/*{opponents && opponents.gameUrls.length > 0 && (*/}
+      {/*  <h2>*/}
+      {/*    Found {opponents.gameUrls.length} opponents, of which {cheaters.length} cheaters*/}
+      {/*    and {streamers.length} streamers*/}
+      {/*  </h2>*/}
+      {/*)}*/}
 
       <div className={styles.results}>
         <div className={styles.box + " " + styles.cheaters}>
