@@ -41,6 +41,7 @@ function reducer(state, action) {
         isLoading: true,
       };
     case "login":
+      console.log('login pl', action.payload);
       return {
         ...state,
         isLoading: false,
@@ -67,9 +68,10 @@ function reducer(state, action) {
           },
         }
       };
-    case "data/opponents": {
+    case "data/games": {
       const playedGames = [];
       let unique;
+
       for (const game of action.payload) {
         // make opponent
         const opponent = {
@@ -82,21 +84,24 @@ function reducer(state, action) {
         };
 
         playedGames.push(opponent);
-
-        // map games per opponent
-        unique = Array.from(new Set(playedGames.map(e => e.username))).map(
-          user => {
-            return {
-              username: user,
-              gameUrls: playedGames.filter(e => e.username === user).map(e => e.gameUrls),
-            }
-          }
-        )
       }
+
+      // map games per opponent
+      unique = Array.from(new Set(playedGames.map(e => e.username))).map(
+        user => {
+          return {
+            username: user,
+            gameUrls: playedGames.filter(e => e.username === user).map(e => e.gameUrls),
+          }
+        }
+      )
+
+      console.log("state after update:", { ...state, opponents: unique });
 
       return {
         ...state,
-        opponents: unique
+        isLoading: false,
+        opponents: unique,
       };
     }
     case "data/rating":
@@ -121,6 +126,7 @@ function reducer(state, action) {
         error: action.payload,
       };
     case "opponents/check":
+      console.log('check pl', action.payload);
       return {
         ...state,
         isLoading: false,
@@ -144,40 +150,44 @@ function ChessProvider({ children }) {
     dispatch,
   ] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    const checkOpponents = async () => {
-      for (const opponent of opponents) {
-        try {
-          const res = await fetch(
+  async function checkEnemies() {
+    dispatch({ type: "loading" });
+    let updated = [];
+
+    try {
+      updated = await Promise.all(opponents.map(async (opponent) => {
+        const res = await fetch(
             `https://api.chess.com/pub/player/${opponent.username}`
-          );
-          const data = await res.json();
+        );
+        const data = await res.json();
 
-          if (data.status === "closed:fair_play_violations" || data.status === "closed:abuse") {
-            opponent.isCheater == true;
-          }
-          if (data.is_streamer === true) {
-            opponent.isStreamer = true;
-            if (data.twitch_url) {
-              opponent.twitch = data.twitch_url;
-            }
-          }
+        const updatedOpponent = { ...opponent };
 
-        } catch (error) {
-          console.error(error);
+        if (data.status === "closed:fair_play_violations" || data.status === "closed:abuse") {
+          updatedOpponent.isCheater = true;
         }
-      }
 
-      console.log('updated opponents', opponents)
+        if (data.is_streamer === true) {
+          updatedOpponent.isStreamer = true;
+          if (data.twitch_url) {
+            updatedOpponent.twitch = data.twitch_url;
+          }
+        }
+        return updatedOpponent;
+      }));
 
+      console.log('updated', updated);
+
+      // Now dispatch the updated opponents list here
       dispatch({
         type: "opponents/check",
-        payload: opponents,
+        payload: updated,
       });
-    };
 
-    checkOpponents();
-  }, [opponents]);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async function login(user) {
     if (user === " ") return;
@@ -258,8 +268,10 @@ function ChessProvider({ children }) {
 
       if (data.message) throw new Error(data.message);
 
+      console.log('data.games', data.games);
+
       dispatch({
-        type: "data/opponents",
+        type: "data/games",
         payload: data.games,
       });
     } catch (error) {
@@ -282,6 +294,7 @@ function ChessProvider({ children }) {
         fetchOpponents,
         checkSuspect,
         checkRating,
+        checkEnemies
       }}
     >
       {children}

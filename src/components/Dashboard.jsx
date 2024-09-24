@@ -73,8 +73,6 @@ function Dashboard() {
   const lastOnline = calcDate(player.last_online);
   const accountCreated = calcDate(player.joined);
 
-  console.log('opponents', opponents);
-
   return (
       <>
         <div className={styles.ui}>

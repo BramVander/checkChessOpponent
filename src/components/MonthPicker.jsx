@@ -14,14 +14,15 @@ function DatePicker() {
     year: thisYear,
   });
 
-  const { fetchOpponents } = useChess();
+  const { fetchOpponents, checkEnemies } = useChess();
 
-  function handleClick(e) {
+  async function handleClick(e) {
     e.preventDefault();
 
     const clickedYear = selectedMonthData.year;
     const clickedMonth = selectedMonthData.month.toString().padStart(2, "0");
-    fetchOpponents(clickedYear, clickedMonth);
+    await fetchOpponents(clickedYear, clickedMonth);
+    await checkEnemies();
   }
 
   return (
