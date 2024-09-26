@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-import { createContext, useContext, useEffect, useReducer } from "react";
+import {createContext, useContext, useEffect, useReducer, useRef} from "react";
 
 const BASE_URL = "https://api.chess.com/pub/player";
 
@@ -29,6 +28,8 @@ const initialState = {
     }
   },
   opponents: [],
+  cheaters: [],
+  streamers: []
 }
 // /state
 
@@ -41,7 +42,6 @@ function reducer(state, action) {
         isLoading: true,
       };
     case "login":
-      console.log('login pl', action.payload);
       return {
         ...state,
         isLoading: false,
@@ -53,6 +53,7 @@ function reducer(state, action) {
         ...initialState
       };
     case "data/suspect":
+      // console.log('data/suspect', action.payload);
       return {
         ...state,
         isLoading: false,
@@ -69,42 +70,15 @@ function reducer(state, action) {
         }
       };
     case "data/games": {
-      const playedGames = [];
-      let unique;
-
-      for (const game of action.payload) {
-        // make opponent
-        const opponent = {
-          username:
-              game.white.username.toLowerCase() ===
-              state.player.username.toLowerCase()
-                  ? game.black.username.toLowerCase()
-                  : game.white.username.toLowerCase(),
-          gameUrls: game.url,
-        };
-
-        playedGames.push(opponent);
-      }
-
-      // map games per opponent
-      unique = Array.from(new Set(playedGames.map(e => e.username))).map(
-        user => {
-          return {
-            username: user,
-            gameUrls: playedGames.filter(e => e.username === user).map(e => e.gameUrls),
-          }
-        }
-      )
-
-      console.log("state after update:", { ...state, opponents: unique });
-
+      // console.log('filling opponents', action);
       return {
         ...state,
         isLoading: false,
-        opponents: unique,
+        opponents: action.payload,
       };
     }
     case "data/rating":
+      // console.log('data/rating', action.payload);
       return {
         ...state,
         isLoading: false,
@@ -121,22 +95,25 @@ function reducer(state, action) {
         }
       };
     case "data/failed":
+      // console.log('data/failed', action.payload);
       return {
         ...initialState,
+        isLoading: false,
         error: action.payload,
       };
     case "opponents/check":
-      console.log('check pl', action.payload);
       return {
         ...state,
         isLoading: false,
-        opponents: action.payload
+        cheaters: action.payload.cheaters,
+        streamers: action.payload.streamers
       }
     default:
       throw new Error("Action unknown");
   }
 }
 
+// eslint-disable-next-line react/prop-types
 function ChessProvider({ children }) {
   const [
     {
@@ -146,48 +123,53 @@ function ChessProvider({ children }) {
       player,
       suspect,
       opponents,
+      cheaters,
+      streamers
     },
     dispatch,
   ] = useReducer(reducer, initialState);
 
-  async function checkEnemies() {
-    dispatch({ type: "loading" });
-    let updated = [];
+  useEffect(() => {
+    const checkOpponents = async () => {
+      const foundCheaters = [];
+      const foundStreamers = [];
 
-    try {
-      updated = await Promise.all(opponents.map(async (opponent) => {
-        const res = await fetch(
-            `https://api.chess.com/pub/player/${opponent.username}`
-        );
-        const data = await res.json();
+      for (const opponent of opponents) {
+        console.log(opponent);
+        try {
+          const res = await fetch(
+              `https://api.chess.com/pub/player/${opponent.username}`
+          );
 
-        const updatedOpponent = { ...opponent };
+          const data = await res.json();
 
-        if (data.status === "closed:fair_play_violations" || data.status === "closed:abuse") {
-          updatedOpponent.isCheater = true;
-        }
-
-        if (data.is_streamer === true) {
-          updatedOpponent.isStreamer = true;
-          if (data.twitch_url) {
-            updatedOpponent.twitch = data.twitch_url;
+          if (data.status === "closed:fair_play_violations" || data.status === "closed:abuse") {
+            opponent.isCheater = true;
+            foundCheaters.push(opponent);
           }
+
+          if (data.is_streamer) {
+            opponent.isStreamer = true;
+            if (data.twitch_url) {
+              opponent.twitch = data.twitch_url;
+            }
+            foundStreamers.push(opponent);
+          }
+        } catch (error) {
+          console.error(error);
         }
-        return updatedOpponent;
-      }));
+      }
 
-      console.log('updated', updated);
+      console.log(foundCheaters, foundStreamers);
 
-      // Now dispatch the updated opponents list here
       dispatch({
         type: "opponents/check",
-        payload: updated,
+        payload: { cheaters: foundCheaters, streamers: foundStreamers },
       });
+    };
 
-    } catch (error) {
-      console.error(error);
-    }
-  }
+    checkOpponents();
+  }, [opponents]);
 
   async function login(user) {
     if (user === " ") return;
@@ -268,11 +250,36 @@ function ChessProvider({ children }) {
 
       if (data.message) throw new Error(data.message);
 
-      console.log('data.games', data.games);
+      const playedGames = [];
+      let unique;
+
+      for (const game of data.games) {
+        // make opponent
+        const opponent = {
+          username:
+              game.white.username.toLowerCase() ===
+              player.username.toLowerCase()
+                  ? game.black.username.toLowerCase()
+                  : game.white.username.toLowerCase(),
+          gameUrls: game.url,
+        };
+
+        playedGames.push(opponent);
+      }
+
+      // map games per opponent
+      unique = Array.from(new Set(playedGames.map(e => e.username))).map(
+        user => {
+          return {
+            username: user,
+            gameUrls: playedGames.filter(e => e.username === user).map(e => e.gameUrls),
+          }
+        }
+      )
 
       dispatch({
         type: "data/games",
-        payload: data.games,
+        payload: unique,
       });
     } catch (error) {
       dispatch({ type: "data/failed", payload: error.message });
@@ -288,13 +295,14 @@ function ChessProvider({ children }) {
         player,
         suspect,
         opponents,
+        cheaters,
+        streamers,
 
         login,
         logout,
         fetchOpponents,
         checkSuspect,
         checkRating,
-        checkEnemies
       }}
     >
       {children}

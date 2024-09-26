@@ -14,7 +14,7 @@ function DatePicker() {
     year: thisYear,
   });
 
-  const { fetchOpponents, checkEnemies } = useChess();
+  const { fetchOpponents } = useChess();
 
   async function handleClick(e) {
     e.preventDefault();
@@ -22,7 +22,6 @@ function DatePicker() {
     const clickedYear = selectedMonthData.year;
     const clickedMonth = selectedMonthData.month.toString().padStart(2, "0");
     await fetchOpponents(clickedYear, clickedMonth);
-    await checkEnemies();
   }
 
   return (

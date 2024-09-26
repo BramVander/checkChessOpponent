@@ -57,15 +57,7 @@ function Dashboard() {
 
     return (
         <div>
-          {opponents.map((opponent, index) => {
-            <FormRow key={index}>
-              <div onClick={() => setShowGames(!showGames)}>{opponent.username}</div>
-              {showGames && opponent.gameUrls.map((gameUrl, i) => {
-                <Link href={gameUrl} target="_blank">Game {i}</Link>
-              })}
-              {opponent.twitch && <Link href={opponent.twitch} target="_blank">{opponent.twitch}</Link>}
-            </FormRow>
-          })}
+          complete renderList func
         </div>
     )
   }
