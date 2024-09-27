@@ -4,10 +4,22 @@
   text-align: center;
 
   .score,
-  .target {
+  .misses,
+  .target,
+  .highscore {
     margin: 0;
     font-weight: 900;
     font-size: 1.5rem;
+  }
+
+  .misses {
+    color: tomato;
+    font-weight: 700;
+  }
+
+  .highscore {
+    color: gold;
+    font-weight: 700;
   }
 }
 

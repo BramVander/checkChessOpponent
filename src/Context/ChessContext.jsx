@@ -9,24 +9,8 @@ const initialState = {
   isLoading: false,
   isLoggedIn: false,
   error: '',
-  player: {
-    name: '',
-    avatar: '',
-    subscription: '',
-    joined: '',
-    last_online: ''
-  },
-  suspect: {
-    status: '',
-    wins: 0,
-    losses: 0,
-    draws: 0,
-    rating: {
-      best: 0,
-      latest: 0,
-      fide: 0,
-    }
-  },
+  player: {},
+  suspect: {},
   opponents: [],
   cheaters: [],
   streamers: []
@@ -73,7 +57,6 @@ function reducer(state, action) {
       // console.log('filling opponents', action);
       return {
         ...state,
-        isLoading: false,
         opponents: action.payload,
       };
     }
@@ -135,7 +118,7 @@ function ChessProvider({ children }) {
       const foundStreamers = [];
 
       for (const opponent of opponents) {
-        console.log(opponent);
+        // console.log(opponent);
         try {
           const res = await fetch(
               `https://api.chess.com/pub/player/${opponent.username}`
@@ -160,8 +143,6 @@ function ChessProvider({ children }) {
         }
       }
 
-      console.log(foundCheaters, foundStreamers);
-
       dispatch({
         type: "opponents/check",
         payload: { cheaters: foundCheaters, streamers: foundStreamers },
@@ -179,6 +160,8 @@ function ChessProvider({ children }) {
       const data = await res.json();
 
       if (data.message) throw new Error(data.message);
+
+      // console.log('login', data);
 
       dispatch({
         type: "login",
@@ -235,7 +218,7 @@ function ChessProvider({ children }) {
   }
 
   async function fetchOpponents(year, month) {
-    if (player.username === initialState.user) return;
+    if (player.username === initialState.player.username) return;
 
     dispatch({ type: "loading" });
 

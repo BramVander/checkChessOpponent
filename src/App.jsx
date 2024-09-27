@@ -1,12 +1,16 @@
+import {useState} from "react";
 import { useChess } from "./Context/ChessContext";
 
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import Error from "./components/UI/Error";
 import Loader from "./components/UI/Loader";
+import Test from "./components/Test";
+
 
 function App() {
   const { isLoading, error, logout, isLoggedIn, player } = useChess();
+  const [test, setTest] = useState(false);
 
   function handleLogout() {
     logout();
@@ -35,6 +39,8 @@ function App() {
           </a>
         </h1>
 
+        <button onClick={() =>setTest(!test)}>Test</button>
+        {test && <Test />}
         {error && <Error message={error} color="tomato" />}
         {isLoading && <Loader />}
         {!isLoading && !isLoggedIn && <Login />}

@@ -31,6 +31,7 @@
     flex-direction: column;
     padding: 1rem;
     border-radius: 5px;
+    width: max-content;
   }
 
   .cheaters {

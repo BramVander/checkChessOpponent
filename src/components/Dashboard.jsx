@@ -1,28 +1,12 @@
-import { useChess } from "../Context/ChessContext";
 import DatePicker from "./MonthPicker";
 
+import { useChess } from "../Context/ChessContext";
 import styles from "./Dashboard.module.css";
-import styled from "styled-components";
-import {useState} from "react";
-
-const FormRow = styled.div`
-  display: grid;
-  align-items: center;
-  grid-template-columns: 1fr 1fr;
-`;
-
-const Link = styled.a`
-  color: white;
-  background: black;
-  text-align: center;
-  width: fit-content;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
-`;
+import TitleBadge from "./UI/TitleBadge.jsx"
+import Collapsable from "./UI/Collapsable.jsx";
 
 function Dashboard() {
-  const { opponents, player } = useChess();
-  const [showGames, setShowGames] = useState(false);
+  const { opponents, player, cheaters, streamers } = useChess();
 
   function calcDate(timestamp) {
     const miliSec = new Date(timestamp * 1000);
@@ -49,16 +33,16 @@ function Dashboard() {
     return date;
   }
 
-  function makeList(data, msg) {
+  function renderList(list, msg) {
     // Check if data is empty
-    if (data.length === 0) {
+    if (list.length === 0) {
       return <p>{msg}</p>;
     }
 
     return (
-        <div>
-          complete renderList func
-        </div>
+      list.map((game, i) => (
+        <Collapsable key={i} username={game.username} twitch={game.twitch} gameUrls={game.gameUrls}>hi</Collapsable>
+      ))
     )
   }
 
@@ -71,7 +55,7 @@ function Dashboard() {
           <div className={styles.intro}>
             <img className={styles.avatar} src={player.avatar}/>
             <p>
-              Track opponents <strong>{player.username}</strong> played against{" "}
+              Track opponents <strong>{player.username}</strong> {player.title && <TitleBadge rank={player.title} />} played against
               <br></br>
               Find <strong>cheaters</strong> on the wall of shame &<br></br>
               Find <strong>streamers</strong> in the hall of fame
@@ -92,11 +76,11 @@ function Dashboard() {
         <div className={styles.results}>
           <div className={styles.box + " " + styles.cheaters}>
             <h2>Wall of shame</h2>
-            {makeList(opponents.filter((opp) => opp.isCheater), 'No Cheaters found')}
+            {renderList(cheaters, 'No Cheaters found')}
           </div>
           <div className={styles.box + " " + styles.streamers}>
             <h2>Hall of fame</h2>
-            {makeList(opponents.filter((opp) => opp.isStreamer), 'No Cheaters found')}
+            {renderList(streamers, 'No Cheaters found')}
           </div>
         </div>
       </>
