@@ -14,7 +14,8 @@ Check:
 - suspicious players
 - specific games vs opponents
 - stats
-  & practice your board precision!
+
+& practice your board precision!
 
 Upcomming
 
