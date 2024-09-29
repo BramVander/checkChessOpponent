@@ -38,11 +38,7 @@ function Collapsable({ username, twitch, gameUrls }) {
   return (
     <>
       <Username>
-        <Link
-          href={twitch}
-          target="_blank"
-          title="Click to view twitch channel"
-        >
+        <Link href={twitch} target="_blank" title="View twitch channel">
           {username}
         </Link>{" "}
         &nbsp;
@@ -57,7 +53,7 @@ function Collapsable({ username, twitch, gameUrls }) {
         {open &&
           gameUrls.map((gameUrl, j) => (
             <ListItem key={j}>
-              <Link key={j} href={gameUrl} target="_blank">
+              <Link key={j} href={gameUrl} target="_blank" title="View game">
                 View game {j + 1}
               </Link>
             </ListItem>
