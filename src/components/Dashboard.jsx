@@ -2,7 +2,7 @@ import DatePicker from "./MonthPicker";
 
 import { useChess } from "../Context/ChessContext";
 import styles from "./Dashboard.module.css";
-import TitleBadge from "./UI/TitleBadge.jsx"
+import TitleBadge from "./UI/TitleBadge.jsx";
 import Collapsable from "./UI/Collapsable.jsx";
 
 function Dashboard() {
@@ -39,51 +39,63 @@ function Dashboard() {
       return <p>{msg}</p>;
     }
 
-    return (
-      list.map((game, i) => (
-        <Collapsable key={i} username={game.username} twitch={game.twitch} gameUrls={game.gameUrls}>hi</Collapsable>
-      ))
-    )
+    return list.map((game, i) => (
+      <Collapsable
+        key={i}
+        username={game.username}
+        twitch={game.twitch}
+        gameUrls={game.gameUrls}
+      >
+        hi
+      </Collapsable>
+    ));
   }
 
   const lastOnline = calcDate(player.last_online);
   const accountCreated = calcDate(player.joined);
 
   return (
-      <>
-        <div className={styles.ui}>
-          <div className={styles.intro}>
-            <img className={styles.avatar} src={player.avatar}/>
-            <p>
-              Track opponents <strong>{player.username}</strong> {player.title && <TitleBadge rank={player.title} />} played against
-              <br></br>
-              Find <strong>cheaters</strong> on the wall of shame &<br></br>
-              Find <strong>streamers</strong> in the hall of fame
-            </p>
-          </div>
-
+    <>
+      <div className={styles.ui}>
+        <div className={styles.intro}>
+          <img className={styles.avatar} src={player.avatar} />
           <p>
-            Account creation: {accountCreated} <br></br>
-            Last online: {lastOnline} <br></br>
-            Subscription: {player.status}
+            Track opponents <strong>{player.username}</strong>{" "}
+            {player.title && <TitleBadge rank={player.title} />} played against
+            <br></br>
+            Find <strong>cheaters</strong> on the wall of shame &<br></br>
+            Find <strong>streamers</strong> in the hall of fame
           </p>
-          <label>Select a month</label>
-          <DatePicker></DatePicker>
         </div>
 
-        {opponents && <h2>Found {opponents.length} opponents, of which {opponents.filter((opp) => opp.isCheater).length} cheaters and {opponents.filter((opp) => opp.isStreamer).length} streamers</h2>}
+        <p>
+          Account creation: {accountCreated} <br></br>
+          Last online: {lastOnline} <br></br>
+          Subscription: {player.status}
+        </p>
+        <label>Select a month</label>
+        <DatePicker></DatePicker>
+      </div>
 
-        <div className={styles.results}>
-          <div className={styles.box + " " + styles.cheaters}>
-            <h2>Wall of shame</h2>
-            {renderList(cheaters, 'No Cheaters found')}
-          </div>
-          <div className={styles.box + " " + styles.streamers}>
-            <h2>Hall of fame</h2>
-            {renderList(streamers, 'No Cheaters found')}
-          </div>
+      {opponents && (
+        <h2>
+          Found {opponents.length} opponents, of which{" "}
+          {opponents.filter((opp) => opp.isCheater).length} cheaters and{" "}
+          {opponents.filter((opp) => opp.isStreamer).length} streamers
+        </h2>
+      )}
+
+      <div className={styles.results}>
+        <div className={styles.box + " " + styles.cheaters}>
+          <h2>Wall of shame</h2>
+          {renderList(cheaters, "No Cheaters found")}
         </div>
-      </>
+        <div className={styles.box + " " + styles.streamers}>
+          <h2>Hall of fame</h2>
+          {renderList(streamers, "No Streamers found")}
+        </div>
+      </div>
+    </>
   );
 }
 
