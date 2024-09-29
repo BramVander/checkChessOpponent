@@ -21,7 +21,3 @@ Upcomming
 
 - check for formats individually: chess960 daily, blitz, bullet, daily, rapid, puzzle rush, tactics, lessons
   (this will decrease loading times as well)
-
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
