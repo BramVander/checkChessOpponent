@@ -41,5 +41,9 @@
   .streamers {
     background-color: #645606;
     border: 3px solid gold;
+
+    .small {
+      font-size: 10px;
+    }
   }
 }

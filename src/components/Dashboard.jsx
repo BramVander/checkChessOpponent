@@ -90,7 +90,10 @@ function Dashboard() {
           <h2>Wall of shame</h2>
           {renderList(cheaters, "No Cheaters found")}
         </div>
-        <div className={styles.box + " " + styles.streamers}>
+        <div
+          className={styles.box + " " + styles.streamers}
+          title="Click name for Twitch channel"
+        >
           <h2>Hall of fame</h2>
           {renderList(streamers, "No Streamers found")}
         </div>
