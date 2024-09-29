@@ -10,11 +10,16 @@ Check:
 
 - cheaters you played against
 - streamers you played against
-- check twitch channel from streamers you played against
-- check suspicious players
-- check specific games vs opponents
+- twitch channel from streamers you played against
+- suspicious players
+- specific games vs opponents
 - stats
-- practice your board precision!
+  & practice your board precision!
+
+Upcomming
+
+- check for formats individually: chess960 daily, blitz, bullet, daily, rapid, puzzle rush, tactics, lessons
+  (this will decrease loading times as well)
 
 # React + Vite
 

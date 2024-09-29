@@ -261,6 +261,8 @@ function ChessProvider({ children }) {
         }
       );
 
+      // console.log("games", data);
+
       dispatch({
         type: "data/games",
         payload: unique,
