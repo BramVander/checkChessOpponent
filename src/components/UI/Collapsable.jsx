@@ -12,24 +12,25 @@ const ListRow = styled.ol`
 
 const ListItem = styled.li`
   color: white;
-  background-color: black;
+  background-color: #81b64c;
   text-align: center;
   padding: 4px;
   margin: 4px;
 `;
 
 const Username = styled.p`
-  background: black;
-  width: fit-content;
-  opacity: 0.5;
-  margin: 0;
-  padding: 4px;
+  color: white;
+  background: #558c44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
 `;
 
 const Link = styled.a`
   color: white;
-  background-color: black;
   text-align: center;
+  text-decoration: none;
 `;
 
 function Collapsable({ username, twitch, gameUrls }) {
@@ -37,8 +38,12 @@ function Collapsable({ username, twitch, gameUrls }) {
 
   return (
     <>
-      <Username>
-        <Link href={twitch} target="_blank" title="View twitch channel">
+      <Username style={{ backgroundColor: twitch ? "gold" : "tomato" }}>
+        <Link
+          href={twitch}
+          target="_blank"
+          title={twitch ? "View twitch channel" : ""}
+        >
           {username}
         </Link>{" "}
         &nbsp;

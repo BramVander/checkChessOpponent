@@ -1,52 +1,37 @@
-import {useState} from "react";
-import { useChess } from "./Context/ChessContext";
-
-import Login from "./components/Login";
-import Dashboard from "./components/Dashboard";
-import Error from "./components/UI/Error";
-import Loader from "./components/UI/Loader";
-import Test from "./components/Test";
-
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import "./styles/App.css";
+import Homepage from "./pages/Homepage";
+import Dashboard from "./pages/Dashboard";
+import { useDispatch, useSelector } from "react-redux";
+import { userError } from "./store/UserSlice/userSlice";
 
 function App() {
-  const { isLoading, error, logout, isLoggedIn, player } = useChess();
-  const [test, setTest] = useState(false);
+  const ProtectedRoute = ({ children }) => {
+    const authenticated = useSelector((state) => state.user.authenticated);
+    const dispatch = useDispatch();
 
-  function handleLogout() {
-    logout();
-  }
+    if (!authenticated) {
+      dispatch(userError("Please log in to visit the dashboard"));
+      return <Navigate to="/" replace />;
+    }
+
+    return children; // Render the children if authenticated
+  };
 
   return (
-    <>
-      <main>
-        <div className="header">
-          <img
-            alt="Chess logo"
-            src="/logo.png"
-            onClick={handleLogout}
-            title="click to go home"
-          />
-          {isLoggedIn && (
-            <button className="btn-primary logout" onClick={handleLogout}>
-              Logout
-            </button>
-          )}
-        </div>
-        <h1>
-          Check your opponents for{" "}
-          <a href="https://www.chess.com/" target="_blank">
-            chess.com
-          </a>
-        </h1>
-
-        <button onClick={() =>setTest(!test)}>Test</button>
-        {test && <Test />}
-        {error && <Error message={error} color="tomato" />}
-        {isLoading && <Loader />}
-        {!isLoading && !isLoggedIn && <Login />}
-        {!isLoading && isLoggedIn && <Dashboard user={player} />}
-      </main>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<Homepage />} />
+        <Route
+          path="dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

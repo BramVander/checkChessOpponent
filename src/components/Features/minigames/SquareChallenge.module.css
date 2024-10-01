@@ -27,7 +27,6 @@
   display: grid;
   grid-template-columns: repeat(8, 50px);
   grid-template-rows: repeat(8, 50px);
-  gap: 1px;
   place-items: center;
   place-content: center;
   transform: rotate(90deg) scaleX(-1);

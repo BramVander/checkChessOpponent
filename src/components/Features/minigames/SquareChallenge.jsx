@@ -29,20 +29,23 @@ const ChessNotationChallenge = () => {
     const correct = "#7fa650"; // --primary-color rgb(127, 166, 80)
     const incorrect = "#ff6347"; // --error-color rgb(255, 99, 71)
 
-
     // guard for doubleclick
     if (original === "rgb(127, 166, 80)" || original === "rgb(255, 99, 71)")
       return;
 
     if (clickedSquare.dataset.square === currentNotation) {
       clickedSquare.style.background = correct;
-      setScore(score + 1);
-      localStorage.setItem("Highscore", score+1);
+      setScore((score) => score + 1);
+      localStorage.setItem("score", JSON.stringify({ score: score + 1 })); // Update score storage
     } else {
       clickedSquare.style.background = incorrect;
       setScore(score - 1);
-      setMisses(() => misses + 1);
-      localStorage.setItem("Highscore", JSON.stringify({score: score+1, missed: misses+1}));
+      setMisses((misses) => misses + 1);
+      localStorage.setItem(
+        "missed",
+        // spread old obj, modify .missed
+        JSON.stringify({ missed: misses + 1 })
+      );
     }
 
     setCurrentNotation(giveNotation());
@@ -52,18 +55,29 @@ const ChessNotationChallenge = () => {
     }, 500);
   }
 
-  const hs = JSON.parse(localStorage.getItem("Highscore"));
+  // const hscore = JSON.parse(localStorage.getItem("score")) || 0;
+  // const hmissed = JSON.parse(localStorage.getItem("missed")) || 0;
+
+  // const hs = {
+  //   score: JSON.parse(localStorage.getItem("score")) || 0,
+  //   missed: JSON.parse(localStorage.getItem("missed")) || 0,
+  // };
 
   return (
     <>
       <div className={styles.rules}>
         <p>
-          Practice your board precision. <br/> Find the target square.
+          \\ toDo: style Practice your board precision. <br /> Find the target
+          square.
         </p>
         <p className={styles.target}>Target: {currentNotation}</p>
         <p className={styles.score}>Score: {score}</p>
         <p className={styles.misses}>Misses: {misses}</p>
-        {hs && <p className={styles.highscore}>Highscore: {hs.score - hs.missed ?? 0} with {hs.missed ?? 0} misses</p>}
+        {/* {hs.score && hs.missed && (
+          <p className={styles.highscore}>
+            Highscore: {hs.score} with {hs.missed} misses
+          </p>
+        )} */}
       </div>
       <div className={styles.board}>
         {boardSquares.map((square) => (

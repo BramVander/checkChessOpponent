@@ -1,14 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import store from "./store/store.js";
 import App from "./App.jsx";
-import "./index.css";
+import "./styles/App.css";
 
-import { ChessProvider } from "./Context/ChessContext.jsx";
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <ChessProvider>
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <Provider store={store}>
       <App />
-    </ChessProvider>
-  </React.StrictMode>
+    </Provider>
+  </StrictMode>
 );
