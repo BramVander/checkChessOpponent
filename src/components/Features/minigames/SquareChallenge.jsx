@@ -67,8 +67,7 @@ const ChessNotationChallenge = () => {
     <>
       <div className={styles.rules}>
         <p>
-          \\ toDo: style Practice your board precision. <br /> Find the target
-          square.
+          \\ toDo: styling, leave modules for now <br /> Find the target square.
         </p>
         <p className={styles.target}>Target: {currentNotation}</p>
         <p className={styles.score}>Score: {score}</p>

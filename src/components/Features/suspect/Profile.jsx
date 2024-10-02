@@ -24,6 +24,10 @@ function Profile({ suspect }) {
         <Header style={{ backgroundColor: "tomato" }}>
           Suspect: {suspect.profile.username}
         </Header>
+        <span>
+          \\ toDo: currently only shows rapid format, add tabs for each
+          timeformat
+        </span>
         <Box>
           <Text>
             Wins: {suspect.rating.chess_rapid.record.win}
