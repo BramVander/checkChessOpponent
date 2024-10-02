@@ -3,7 +3,7 @@ import "./styles/App.css";
 import Homepage from "./pages/Homepage";
 import Dashboard from "./pages/Dashboard";
 import { useDispatch, useSelector } from "react-redux";
-import { userError } from "./store/UserSlice/userSlice";
+import { userError } from "./store/userSlice";
 
 function App() {
   const ProtectedRoute = ({ children }) => {

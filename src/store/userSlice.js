@@ -17,7 +17,7 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
     extraReducers: (builder) => {
-      builder.addCase(logout, () => initialState); // Handle reset action
+      builder.addCase(logout, () => initialState);
     },
   },
 });

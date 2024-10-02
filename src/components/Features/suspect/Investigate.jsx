@@ -7,10 +7,7 @@ import {
   Button,
 } from "../../../styles/commonStyles";
 import { useState } from "react";
-import {
-  investigate,
-  suspectError,
-} from "../../../store/SuspectSlice/suspectSlice";
+import { investigate, suspectError } from "../../../store/suspectSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Profile from "./Profile";
 

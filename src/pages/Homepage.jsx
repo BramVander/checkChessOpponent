@@ -6,14 +6,14 @@ import {
   Input,
   BtnBox,
   Button,
-  ErrorMessage,
 } from "../styles/commonStyles";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../store/UserSlice/userSlice";
-import { investigate, suspectError } from "../store/SuspectSlice/suspectSlice";
+import { login } from "../store/userSlice";
+import { investigate, suspectError } from "../store/suspectSlice";
 import Profile from "../components/Features/suspect/Profile";
+import Notification from "../components/UI/Notification";
 
 function Homepage() {
   const userError = useSelector((state) => state.user.error);
@@ -67,9 +67,6 @@ function Homepage() {
 
       if (ratingData.message) throw new Error(ratingData.message);
 
-      // console.log("i", infoData);
-      // console.log("r", ratingData);
-
       dispatch(investigate({ info: infoData, rating: ratingData }));
     } catch (error) {
       dispatch(suspectError(error.message));
@@ -78,6 +75,8 @@ function Homepage() {
 
   return (
     <Main>
+      {userError && <Notification type="fail" msg={userError} />}
+
       <FormElement
         style={{
           boxShadow:
@@ -108,10 +107,6 @@ function Homepage() {
       </FormElement>
 
       {suspect.profile.username && <Profile suspect={suspect} />}
-
-      {userError && (
-        <ErrorMessage>Please log in to visit the dashboard</ErrorMessage>
-      )}
     </Main>
   );
 }

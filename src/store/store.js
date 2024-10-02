@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./UserSlice/userSlice";
-import suspectReducer from "./SuspectSlice/suspectSlice";
-import opponentSlice from "./OpponentSlice/opponentSlice";
+import userReducer from "./userSlice";
+import suspectReducer from "./suspectSlice";
+import opponentSlice from "./opponentSlice";
 
 const rootReducer = (state, action) => {
   if (action.type === "RESET_STATE") {

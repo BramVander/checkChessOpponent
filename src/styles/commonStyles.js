@@ -33,7 +33,7 @@ export const FormTitle = styled.h1`
   font-weight: bold;
   background-color: #558c44;
   border-radius: 18px 18px 0 0;
-  padding-bottom: 10px;
+  padding-block: 10px;
   margin: 0;
 `;
 
@@ -46,8 +46,8 @@ export const Label = styled.label`
 
 export const Input = styled.input`
   font-size: 1.2rem;
-  color: white;
-  background-color: #558c44;
+  color: black;
+  background-color: #fafafa;
   padding: 1rem;
   border: none;
   border-radius: 6px;
@@ -155,6 +155,12 @@ export const Text = styled.p`
   color: black;
   padding-inline: 1rem;
   font-weight: 700;
+`;
+
+export const TextArea = styled.textarea`
+  color: black;
+  background-color: #fafafa;
+  height: 100px;
 `;
 
 export const Select = styled.select`

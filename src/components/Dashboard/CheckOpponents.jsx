@@ -13,14 +13,15 @@ import {
   isLoading,
   fetchOpponents,
   populateCheatersAndStreamers,
-} from "../../store/OpponentSlice/opponentSlice";
+  opponentError,
+} from "../../store/opponentSlice";
 
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import Calendar from "./Calendar";
 import Collapsable from "../UI/Collapsable";
 import Loader from "../UI/Loader";
+import Notification from "../UI/Notification";
 
 function CheckOpponents() {
   const dispatch = useDispatch();
@@ -68,7 +69,7 @@ function CheckOpponents() {
             }
           }
         } catch (error) {
-          console.error("Error filteringCheatersAndStreamers:", error);
+          dispatch(opponentError(error.message));
         }
       }
 
@@ -135,7 +136,7 @@ function CheckOpponents() {
 
       dispatch(fetchOpponents(formatFilteredGamesPerOpponent));
     } catch (error) {
-      dispatch({ type: "error", payload: error.message });
+      dispatch(opponentError(error.message));
     }
   }
 
@@ -163,6 +164,9 @@ function CheckOpponents() {
         <Header style={{ textAlign: "center" }}>
           Check opponents you played against
         </Header>
+        {opponentError && (
+          <Notification type={"fail"} msg={"A nice error msg"} />
+        )}
         <Text>
           Find cheaters in the Hall of Shame and streamers in the Hall of Fame!
         </Text>

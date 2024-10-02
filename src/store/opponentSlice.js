@@ -22,6 +22,7 @@ const opponentSlice = createSlice({
       state.loading = false;
     },
     opponentError(state, action) {
+      state.loading = false;
       state.error = action.payload;
     },
   },
