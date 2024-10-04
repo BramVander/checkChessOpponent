@@ -7,6 +7,8 @@ import {
   faMagnifyingGlass,
   faMask,
 } from "@fortawesome/free-solid-svg-icons";
+import {useState} from "react";
+import Test from "../Test.jsx"
 
 const FeatureGrid = styled.div`
   width: fit-content;
@@ -39,6 +41,7 @@ const FeatureElement = styled.div`
 `;
 
 function Features({ featureSelected, featureFn }) {
+  const [test, setTest] = useState();
   function handleClick(newFeature) {
     if (featureSelected == newFeature) return;
     featureFn(newFeature);
@@ -50,18 +53,21 @@ function Features({ featureSelected, featureFn }) {
         <Header>Features</Header>
         <FeatureGrid>
           <FeatureElement onClick={() => handleClick("bugreport")}>
-            <FontAwesomeIcon icon={faBug} /> Report a bug
+            <FontAwesomeIcon icon={faBug}/> Report a bug
           </FeatureElement>
           <FeatureElement onClick={() => handleClick("check-opponents")}>
-            <FontAwesomeIcon icon={faMagnifyingGlass} /> Check opponents
+            <FontAwesomeIcon icon={faMagnifyingGlass}/> Check opponents
           </FeatureElement>
           <FeatureElement onClick={() => handleClick("investigate")}>
-            <FontAwesomeIcon icon={faMask} /> Investigate suspect
+            <FontAwesomeIcon icon={faMask}/> Investigate suspect
           </FeatureElement>
           <FeatureElement onClick={() => handleClick("minigames")}>
-            <FontAwesomeIcon icon={faGamepad} /> Minigames
+            <FontAwesomeIcon icon={faGamepad}/> Minigames
           </FeatureElement>
+          <button onClick={() => setTest(!test)}>Test</button>
         </FeatureGrid>
+
+        {test && <Test></Test>}
       </Card>
     </>
   );

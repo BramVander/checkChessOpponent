@@ -23,7 +23,7 @@ const Username = styled.p`
   background: #558c44;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 0.5rem;
 `;
 
