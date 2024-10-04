@@ -14,37 +14,35 @@ function Dashboard() {
   const [selectedFeature, setSelectedFeature] = useState("dashboard");
 
   return (
-    <>
-      <Main>
-        {opponentError && <Notification type="fail" msg={opponentError} />}
+    <Main>
+      {opponentError && <Notification type="fail" msg={opponentError} />}
 
-        <section
-          style={{
-            width: "100%",
-            display: "flex",
-            gap: "3rem",
-          }}
-        >
-          <PlayerData />
+      <section
+        style={{
+          width: "100%",
+          display: "flex",
+          gap: "3rem",
+        }}
+      >
+        <PlayerData />
 
-          <div>
-            <Features
-              featureSelected={selectedFeature}
-              featureFn={setSelectedFeature}
-            />
-          </div>
-        </section>
+        <div>
+          <Features
+            featureSelected={selectedFeature}
+            featureFn={setSelectedFeature}
+          />
+        </div>
+      </section>
 
-        <section
-          style={{ width: "100%", display: "flex", justifyContent: "center" }}
-        >
-          {selectedFeature == "check-opponents" && <CheckOpponents />}
-          {selectedFeature == "investigate" && <Investigate />}
-          {selectedFeature == "bugreport" && <Bugreporter />}
-          {selectedFeature == "minigames" && <Minigames />}
-        </section>
-      </Main>
-    </>
+      <section
+        style={{ width: "100%", display: "flex", justifyContent: "center" }}
+      >
+        {selectedFeature == "check-opponents" && <CheckOpponents />}
+        {selectedFeature == "investigate" && <Investigate />}
+        {selectedFeature == "bugreport" && <Bugreporter />}
+        {selectedFeature == "minigames" && <Minigames />}
+      </section>
+    </Main>
   );
 }
 

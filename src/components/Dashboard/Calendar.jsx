@@ -2,26 +2,24 @@ import { MonthPicker, MonthInput } from "react-lite-month-picker";
 
 function Calendar({ openCal, selectMonth, monthData, isOpen }) {
   return (
-    <>
-      <div>
-        <MonthInput
+    <div>
+      <MonthInput
+        size={"small"}
+        selected={monthData}
+        setShowMonthPicker={openCal}
+        showMonthPicker={isOpen}
+        bgColor={"#fafafa"}
+      />
+      {isOpen ? (
+        <MonthPicker
           size={"small"}
+          setIsOpen={openCal}
           selected={monthData}
-          setShowMonthPicker={openCal}
-          showMonthPicker={isOpen}
-          bgColor={"#fafafa"}
+          onChange={selectMonth}
+          bgColorPicker={"#fafafa"}
         />
-        {isOpen ? (
-          <MonthPicker
-            size={"small"}
-            setIsOpen={openCal}
-            selected={monthData}
-            onChange={selectMonth}
-            bgColorPicker={"#fafafa"}
-          />
-        ) : null}
-      </div>
-    </>
+      ) : null}
+    </div>
   );
 }
 

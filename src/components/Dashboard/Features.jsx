@@ -48,28 +48,30 @@ function Features({ featureSelected, featureFn }) {
   }
 
   return (
-    <>
-      <Card style={{ height: "fit-content", justifyContent: "flex-start" }}>
-        <Header>Features</Header>
-        <FeatureGrid>
-          <FeatureElement onClick={() => handleClick("bugreport")}>
-            <FontAwesomeIcon icon={faBug}/> Report a bug
-          </FeatureElement>
-          <FeatureElement onClick={() => handleClick("check-opponents")}>
-            <FontAwesomeIcon icon={faMagnifyingGlass}/> Check opponents
-          </FeatureElement>
-          <FeatureElement onClick={() => handleClick("investigate")}>
-            <FontAwesomeIcon icon={faMask}/> Investigate suspect
-          </FeatureElement>
-          <FeatureElement onClick={() => handleClick("minigames")}>
-            <FontAwesomeIcon icon={faGamepad}/> Minigames
-          </FeatureElement>
-          <button onClick={() => setTest(!test)}>Test</button>
-        </FeatureGrid>
+    <Card style={{ height: "fit-content", justifyContent: "flex-start" }}>
+      <Header>Features</Header>
+      <FeatureGrid>
+        <FeatureElement onClick={() => handleClick("bugreport")}>
+          <FontAwesomeIcon icon={faBug}/> Report a bug
+        </FeatureElement>
 
-        {test && <Test></Test>}
-      </Card>
-    </>
+        <FeatureElement onClick={() => handleClick("check-opponents")}>
+          <FontAwesomeIcon icon={faMagnifyingGlass}/> Check opponents
+        </FeatureElement>
+
+        <FeatureElement onClick={() => handleClick("investigate")}>
+          <FontAwesomeIcon icon={faMask}/> Investigate suspect
+        </FeatureElement>
+
+        <FeatureElement onClick={() => handleClick("minigames")}>
+          <FontAwesomeIcon icon={faGamepad}/> Minigames
+        </FeatureElement>
+
+        <button onClick={() => setTest(!test)}>Test</button>
+      </FeatureGrid>
+
+      {test && <Test></Test>}
+    </Card>
   );
 }
 

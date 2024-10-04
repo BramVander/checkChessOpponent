@@ -19,7 +19,7 @@ import {
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Calendar from "./Calendar";
-import Collapsable from "../UI/Collapsable";
+import Collapsible from "../UI/Collapsible.jsx";
 import Loader from "../UI/Loader";
 import Notification from "../UI/Notification";
 
@@ -30,6 +30,7 @@ function CheckOpponents() {
   const cheaters = useSelector((state) => state.opponent.cheaters);
   const streamers = useSelector((state) => state.opponent.streamers);
   const loading = useSelector((state) => state.opponent.loading);
+  const error = useSelector((state) => state.opponent.error);
 
   const date = new Date();
   let thisYear = date.getFullYear();
@@ -85,7 +86,7 @@ function CheckOpponents() {
     if (opponents.length > 0) {
       filterCheatersAndStreamers();
     }
-  }, [opponents]);
+  }, [opponents, dispatch]);
 
   async function handleCheck(username) {
     try {
@@ -147,88 +148,84 @@ function CheckOpponents() {
     }
 
     return list.map((opponent, i) => (
-      <Collapsable
+      <Collapsible
         key={i}
         username={opponent.username}
         twitch={opponent.twitch}
         gameUrls={opponent.gameUrls}
       >
         hi
-      </Collapsable>
+      </Collapsible>
     ));
   }
 
   return (
-    <>
-      <Page>
-        <Header style={{ textAlign: "center" }}>
-          Check opponents you played against
-        </Header>
-        {opponentError && (
-          <Notification type={"fail"} msg={"A nice error msg"} />
-        )}
-        <Text>
-          Find cheaters in the Hall of Shame and streamers in the Hall of Fame!
-        </Text>
+    <Page>
+      <Header style={{ textAlign: "center" }}>
+        Check opponents you played against
+      </Header>
+      {error && (<Notification type={"fail"} msg={opponentError} />)}
+      <Text>
+        Find cheaters in the Hall of Shame and streamers in the Hall of Fame!
+      </Text>
 
-        <div style={{ display: "flex", alignItems: "flex-start" }}>
-          <Label>
-            Username
-            <DisabledInput defaultValue={player.profile.username} />
-          </Label>
+      <div style={{ display: "flex", alignItems: "flex-start" }}>
+        <Label>
+          Username
+          <DisabledInput defaultValue={player.profile.username} />
+        </Label>
 
-          <Label>
-            Select timeformat
-            <Select onChange={(e) => setFormat(e.target.value)} value={format}>
-              {formats.map((f, i) => (
-                <option key={i}>{f}</option>
-              ))}
-            </Select>
-          </Label>
+        <Label>
+          Select timeformat
+          <Select onChange={(e) => setFormat(e.target.value)} value={format}>
+            {formats.map((f, i) => (
+              <option key={i}>{f}</option>
+            ))}
+          </Select>
+        </Label>
 
-          <Label>
-            Select a month
-            <Calendar
-              isOpen={isCalendarOpen}
-              openCal={setIsCalendarOpen}
-              monthData={selectedMonthData}
-              selectMonth={setSelectedMonthData}
-            ></Calendar>
-          </Label>
-        </div>
+        <Label>
+          Select a month
+          <Calendar
+            isOpen={isCalendarOpen}
+            openCal={setIsCalendarOpen}
+            monthData={selectedMonthData}
+            selectMonth={setSelectedMonthData}
+          ></Calendar>
+        </Label>
+      </div>
 
-        <CheckButton onClick={() => handleCheck(player.profile.username)}>
-          Check opponents
-        </CheckButton>
+      <CheckButton onClick={() => handleCheck(player.profile.username)}>
+        Check opponents
+      </CheckButton>
 
-        {opponents.length > 0 && (
-          <>
-            <p>
-              Found {opponents.length} opponent
-              {opponents.length !== 1 ? "s" : ""}, {cheaters.length} cheater
-              {cheaters.length !== 1 ? "s" : ""} & {streamers.length} streamer
-              {streamers.length !== 1 ? "s" : ""}.
-            </p>
+      {opponents.length > 0 && (
+        <>
+          <p>
+            Found {opponents.length} opponent
+            {opponents.length !== 1 ? "s" : ""}, {cheaters.length} cheater
+            {cheaters.length !== 1 ? "s" : ""} & {streamers.length} streamer
+            {streamers.length !== 1 ? "s" : ""}.
+          </p>
 
-            {loading && (
-              <span>
-                <Loader loading={loading} />
-              </span>
-            )}
+          {loading && (
+            <span>
+              <Loader loading={loading} />
+            </span>
+          )}
 
-            <section style={{ display: "flex", gap: "1rem" }}>
-              <Box style={{ display: "block" }}>
-                {cheaters && renderList(cheaters, "No cheaters found yet...")}
-              </Box>
-              <Box style={{ display: "block" }}>
-                {streamers &&
-                  renderList(streamers, "No streamers found yet...")}
-              </Box>
-            </section>
-          </>
-        )}
-      </Page>
-    </>
+          <section style={{ display: "flex", gap: "1rem" }}>
+            <Box style={{ display: "block" }}>
+              {cheaters && renderList(cheaters, "No cheaters found yet...")}
+            </Box>
+            <Box style={{ display: "block" }}>
+              {streamers &&
+                renderList(streamers, "No streamers found yet...")}
+            </Box>
+          </section>
+        </>
+      )}
+    </Page>
   );
 }
 

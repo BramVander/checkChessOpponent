@@ -41,38 +41,36 @@ function PlayerData() {
   }
 
   return (
-    <>
-      <Card>
-        <Header>{player.profile.name}</Header>
-        <Button
-          style={{
-            backgroundColor: "tomato",
-            borderRadius: "5px",
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-          }}
-          onClick={handleLogout}
-        >
-          logout
-        </Button>
-        <Avatar src={player.profile.avatar} alt="Avatar" />
-        <Text>
-          User: {player.profile.username}{" "}
-          {player.profile.title && (
-            <TitleBadge rank={player.profile.title}></TitleBadge>
-          )}
-          <br />
-          Fide rating: {player.rating.fide}
-          <br />
-          Subscription: {player.profile.status}
-        </Text>
+    <Card>
+      <Header>{player.profile.name}</Header>
+      <Button
+        style={{
+          backgroundColor: "tomato",
+          borderRadius: "5px",
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
+        }}
+        onClick={handleLogout}
+      >
+        logout
+      </Button>
+      <Avatar src={player.profile.avatar} alt="Avatar" />
+      <Text>
+        User: {player.profile.username}{" "}
+        {player.profile.title && (
+          <TitleBadge rank={player.profile.title}></TitleBadge>
+        )}
+        <br />
+        Fide rating: {player.rating.fide}
+        <br />
+        Subscription: {player.profile.status}
+      </Text>
 
-        <Text>
-          Account creation: {calcDate(player.profile.joined)} <br />
-          Last online: {calcDate(player.profile.last_online)} <br />
-        </Text>
-      </Card>
-    </>
+      <Text>
+        Account creation: {calcDate(player.profile.joined)} <br />
+        Last online: {calcDate(player.profile.last_online)} <br />
+      </Text>
+    </Card>
   );
 }
 

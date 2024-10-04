@@ -45,64 +45,61 @@ function Profile({ suspect }) {
 
   const clickTab = (e) => {
     if(!e.target.classList.contains('tab')) return;
-    console.log('click');
     setShowFormat(e.target.innerText);
   };
 
   return (
-    <>
-      <Poster>
-        <Header style={{ backgroundColor: "tomato" }}>
-          Suspect: {suspect.profile.username}
-        </Header>
+    <Poster>
+      <Header style={{ backgroundColor: "tomato" }}>
+        Suspect: {suspect.profile.username}
+      </Header>
 
-        <TabContainer onClick={clickTab}>
-          <FormatTab className="tab">rapid</FormatTab>
-          <FormatTab className="tab">bullet</FormatTab>
-          <FormatTab className="tab">blitz</FormatTab>
-          {/*<FormatTab className="tab">fide</FormatTab>*/}
-          {/*<FormatTab className="tab">tactics</FormatTab>*/}
-          {/*<FormatTab className="tab">puzzle rush</FormatTab>*/}
-        </TabContainer>
+      <TabContainer onClick={clickTab}>
+        <FormatTab className={showFormat === 'rapid' ? 'active tab' : 'tab'}>rapid</FormatTab>
+        <FormatTab className={showFormat === 'bullet' ? 'active tab' : 'tab'}>bullet</FormatTab>
+        <FormatTab className={showFormat === 'blitz' ? 'active tab' : 'tab'}>blitz</FormatTab>
+        {/*<FormatTab className="tab">fide</FormatTab>*/}
+        {/*<FormatTab className="tab">tactics</FormatTab>*/}
+        {/*<FormatTab className="tab">puzzle rush</FormatTab>*/}
+      </TabContainer>
 
-        <Box>
-          <Text>
-            Wins: {data.record.win}
-            <br />
-            Draws: {data.record.loss}
-            <br />
-            Losses: {data.record.draw}
-            <br />
-            <br />
-            Winrate:{" "}
-            {Math.round(
-              (data.record.win /
-                (data.record.win +
-                  data.record.loss +
-                  data.record.draw)) *
-                100
-            )}
-            %
-          </Text>
+      <Box>
+        <Text>
+          Wins: {data.record.win}
+          <br />
+          Draws: {data.record.loss}
+          <br />
+          Losses: {data.record.draw}
+          <br />
+          <br />
+          Winrate:{" "}
+          {Math.round(
+            (data.record.win /
+              (data.record.win +
+                data.record.loss +
+                data.record.draw)) *
+              100
+          )}
+          %
+        </Text>
 
-          <Avatar src={suspect.profile.avatar} alt="Avatar" style={{margin: '0 auto'}} />
+        <Avatar src={suspect.profile.avatar} alt="Avatar" style={{margin: '0 auto'}} />
 
-          <Text>
-            Best rapid: {data.best.rating}
-            <br />
-            Last rapid: {data.last.rating}
-            <br />
-            Fide rapid: {suspect.rating.fide}
-          </Text>
+        <Text>
+          Best rapid: {data.best.rating}
+          <br />
+          Last rapid: {data.last.rating}
+          <br />
+          Fide rapid: {suspect.rating.fide}
+        </Text>
 
-          <BanStatus>
-            {suspect.profile.status.includes("closed")
-              ? "Banned"
-              : "No violations found (yet)"}
-          </BanStatus>
-        </Box>
-      </Poster>
-    </>
+        <BanStatus>
+          {suspect.profile.status.includes("closed")
+            ? "Banned"
+            : "No violations found (yet)"}
+        </BanStatus>
+      </Box>
+    </Poster>
   );
 }
 

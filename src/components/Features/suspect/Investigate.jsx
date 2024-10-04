@@ -41,32 +41,30 @@ function Investigate() {
   }
 
   return (
-    <>
-      <div style={{ display: "flex", gap: "3rem" }}>
-        <FormElement>
-          <FormTitle>Investigate suspect</FormTitle>
-          <Label>
-            Suspect
-            <Input
-              onChange={(e) => setUsername(e.target.value)}
-              value={username}
-            />
-          </Label>
+    <div style={{ display: "flex", gap: "3rem" }}>
+      <FormElement>
+        <FormTitle>Investigate suspect</FormTitle>
+        <Label>
+          Suspect
+          <Input
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          />
+        </Label>
 
-          <BtnBox>
-            <Button
-              type="button"
-              title="Investigate suspicious player"
-              onClick={handleCheck}
-            >
-              Check suspect
-            </Button>
-          </BtnBox>
-        </FormElement>
+        <BtnBox>
+          <Button
+            type="button"
+            title="Investigate suspicious player"
+            onClick={handleCheck}
+          >
+            Check suspect
+          </Button>
+        </BtnBox>
+      </FormElement>
 
-        {suspect.profile.username && <Profile suspect={suspect} />}
-      </div>
-    </>
+      {suspect.profile.username && <Profile suspect={suspect} />}
+    </div>
   );
 }
 

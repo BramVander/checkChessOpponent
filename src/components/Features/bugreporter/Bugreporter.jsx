@@ -9,12 +9,12 @@ import {
 import Notification from "../../UI/Notification";
 
 function Bugreporter() {
-  const [error, setError] = useState("");
+  const [error, setError] = useState("This is not working yet");
 
   function handleReport(e) {
     e.preventDefault();
 
-    setError("This is not working yet");
+    setError("some error");
 
     try {
       // send email

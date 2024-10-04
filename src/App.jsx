@@ -1,13 +1,15 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {userError} from "./store/userSlice";
 import "./styles/App.css";
 import Homepage from "./pages/Homepage";
 import Dashboard from "./pages/Dashboard";
-import { useDispatch, useSelector } from "react-redux";
-import { userError } from "./store/userSlice";
+import {selectIsAuthenticated} from "./selectIsAuthenticated.js";
 
 function App() {
   const ProtectedRoute = ({ children }) => {
-    const authenticated = useSelector((state) => state.user.authenticated);
+
+    const authenticated = useSelector(selectIsAuthenticated);
     const dispatch = useDispatch();
 
     if (!authenticated) {
@@ -15,7 +17,7 @@ function App() {
       return <Navigate to="/" replace />;
     }
 
-    return children; // Render the children if authenticated
+    return children;
   };
 
   return (

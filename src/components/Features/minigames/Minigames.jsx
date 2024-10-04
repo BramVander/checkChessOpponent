@@ -2,11 +2,9 @@ import SquareChallenge from "./SquareChallenge";
 
 function Minigames() {
   return (
-    <>
-      <div>
-        <SquareChallenge />
-      </div>
-    </>
+    <div style={{backgroundColor: "#ebecd0", padding: '1rem'}}>
+      <SquareChallenge />
+    </div>
   );
 }
 

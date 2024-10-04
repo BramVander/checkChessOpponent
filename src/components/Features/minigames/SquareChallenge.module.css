@@ -57,3 +57,5 @@
 .square[data-square^="H"]:nth-of-type(even) {
   background-color: black;
 }
+
+/* vakjes.map((i) => (Math.floor(i/8) + (i%2)) % 2) */

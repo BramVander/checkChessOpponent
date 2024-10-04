@@ -1,16 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import suspectReducer from "./suspectSlice";
-import opponentSlice from "./opponentSlice";
+import opponentReducer from "./opponentSlice";
 
 const rootReducer = (state, action) => {
   if (action.type === "RESET_STATE") {
     state = undefined;
   }
+
+  //toDo
   return {
     user: userReducer(state?.user, action),
     suspect: suspectReducer(state?.suspect, action),
-    opponent: opponentSlice(state?.opponent, action),
+    opponent: opponentReducer(state?.opponent, action),
   };
 };
 

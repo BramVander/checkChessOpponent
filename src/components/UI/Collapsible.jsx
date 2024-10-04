@@ -33,7 +33,7 @@ const Link = styled.a`
   text-decoration: none;
 `;
 
-function Collapsable({ username, twitch, gameUrls }) {
+function Collapsible({ username, twitch, gameUrls }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -68,4 +68,4 @@ function Collapsable({ username, twitch, gameUrls }) {
   );
 }
 
-export default Collapsable;
+export default Collapsible;
