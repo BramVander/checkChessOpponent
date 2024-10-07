@@ -8,7 +8,6 @@ import {
   faMask,
 } from "@fortawesome/free-solid-svg-icons";
 import {useState} from "react";
-import Test from "../Test.jsx"
 
 const FeatureGrid = styled.div`
   width: fit-content;
@@ -41,7 +40,6 @@ const FeatureElement = styled.div`
 `;
 
 function Features({ featureSelected, featureFn }) {
-  const [test, setTest] = useState();
   function handleClick(newFeature) {
     if (featureSelected == newFeature) return;
     featureFn(newFeature);
@@ -66,11 +64,7 @@ function Features({ featureSelected, featureFn }) {
         <FeatureElement onClick={() => handleClick("minigames")}>
           <FontAwesomeIcon icon={faGamepad}/> Minigames
         </FeatureElement>
-
-        <button onClick={() => setTest(!test)}>Test</button>
       </FeatureGrid>
-
-      {test && <Test></Test>}
     </Card>
   );
 }

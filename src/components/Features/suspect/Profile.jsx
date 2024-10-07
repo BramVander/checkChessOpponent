@@ -86,11 +86,11 @@ function Profile({ suspect }) {
         <Avatar src={suspect.profile.avatar} alt="Avatar" style={{margin: '0 auto'}} />
 
         <Text>
-          Best rapid: {data.best.rating}
+          Best {showFormat}: {data.best.rating.toLocaleString('nl-NL')}
           <br />
-          Last rapid: {data.last.rating}
+          Last {showFormat}: {data.last.rating.toLocaleString('nl-NL')}
           <br />
-          Fide rapid: {suspect.rating.fide}
+          Fide: {suspect.rating.fide.toLocaleString('nl-NL')}
         </Text>
 
         <BanStatus>

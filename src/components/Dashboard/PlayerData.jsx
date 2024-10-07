@@ -55,19 +55,19 @@ function PlayerData() {
         logout
       </Button>
       <Avatar src={player.profile.avatar} alt="Avatar" />
-      <Text>
+      <Text style={{lineHeight: 1.3}}>
         User: {player.profile.username}{" "}
         {player.profile.title && (
-          <TitleBadge rank={player.profile.title}></TitleBadge>
+        <TitleBadge rank={player.profile.title}></TitleBadge>
         )}
-        <br />
-        Fide rating: {player.rating.fide}
-        <br />
+        <br/>
+        Fide rating: {player.rating.fide.toLocaleString('nl-NL')}
+        <br/>
         Subscription: {player.profile.status}
       </Text>
 
       <Text>
-        Account creation: {calcDate(player.profile.joined)} <br />
+      Account creation: {calcDate(player.profile.joined)} <br />
         Last online: {calcDate(player.profile.last_online)} <br />
       </Text>
     </Card>

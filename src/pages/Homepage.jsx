@@ -15,6 +15,8 @@ import { investigate, suspectError } from "../store/suspectSlice";
 import Profile from "../components/Features/suspect/Profile";
 import Notification from "../components/UI/Notification";
 
+import Modal from "../components/ui/Modal.jsx"
+
 function Homepage() {
   const userError = useSelector((state) => state.user.error);
   const suspect = useSelector((state) => state.suspect.suspect);

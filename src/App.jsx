@@ -4,13 +4,12 @@ import {userError} from "./store/userSlice";
 import "./styles/App.css";
 import Homepage from "./pages/Homepage";
 import Dashboard from "./pages/Dashboard";
-import {selectIsAuthenticated} from "./selectIsAuthenticated.js";
 
 function App() {
   const ProtectedRoute = ({ children }) => {
-
-    const authenticated = useSelector(selectIsAuthenticated);
     const dispatch = useDispatch();
+
+    const authenticated = useSelector((state) => state.user.authenticated);
 
     if (!authenticated) {
       dispatch(userError("Please log in to visit the dashboard"));
